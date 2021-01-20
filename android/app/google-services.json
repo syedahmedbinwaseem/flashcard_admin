@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "955538499276",
+    "project_id": "flashcard-app-6f5fe",
+    "storage_bucket": "flashcard-app-6f5fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955538499276:android:e2e041ccc975ee4de54469",
+        "android_client_info": {
+          "package_name": "com.kashif.flashcards_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955538499276-nmbpqfdsop2unqh6sdjigjafpq82sf78.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbXBC3peKB4mGybkRn1zAFRJbvBPUkDX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955538499276-nmbpqfdsop2unqh6sdjigjafpq82sf78.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955538499276:android:3398dbbdc5bfb6ace54469",
+        "android_client_info": {
+          "package_name": "hafiz.flashcard_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955538499276-nmbpqfdsop2unqh6sdjigjafpq82sf78.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbXBC3peKB4mGybkRn1zAFRJbvBPUkDX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955538499276-nmbpqfdsop2unqh6sdjigjafpq82sf78.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
