@@ -62,23 +62,23 @@ class _DashboardState extends State<Dashboard> {
                           child: Text(
                             'FLASHCARDS',
                             style: TextStyle(
-                                color: blackTextColor,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                      blurRadius: 5,
-                                      color: Colors.white,
-                                      offset: Offset(2, 2))
-                                ]),
-                          ),
-                        )),
+                              color: blackTextColor,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                    blurRadius: 5,
+                                    color: Colors.white,
+                                    offset: Offset(2, 2))
+                              ]),
+                        ),
+                      )),
                     onTap: () {
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //   builder: (context) => BottomNavigator(
-                      //     initIndex: 0,
-                      //   ),
-                      // ));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BottomNavigator(
+                          initIndex: 0,
+                        ),
+                      ));
                     },
                   ),
                   SizedBox(
