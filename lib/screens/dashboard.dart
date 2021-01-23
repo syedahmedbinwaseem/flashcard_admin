@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashcard_admin/screens/bottomNavigation.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flutter/material.dart';
@@ -143,11 +144,11 @@ class _DashboardState extends State<Dashboard> {
                           )),
                     ),
                     onTap: () {
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //   builder: (context) => BottomNavigator(
-                      //     initIndex: 2,
-                      //   ),
-                      // ));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BottomNavigator(
+                          initIndex: 2,
+                        ),
+                      ));
                     },
                   ),
                   SizedBox(
