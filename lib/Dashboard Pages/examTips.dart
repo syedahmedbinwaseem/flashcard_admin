@@ -44,10 +44,8 @@ class _ExamTipsState extends State<ExamTips> {
     setState(() {
       snap1 = [];
     });
-    QuerySnapshot snap = await FirebaseFirestore.instance
-        .collection('examtips')
-        .orderBy('id')
-        .get();
+    QuerySnapshot snap =
+        await FirebaseFirestore.instance.collection('examtips').get();
     snap.docs.forEach((element) {
       setState(() {
         snap1.add(element);
@@ -121,26 +119,26 @@ class _ExamTipsState extends State<ExamTips> {
                                         fontSize: 20),
                                   ),
                                   SizedBox(height: 10),
-                                  Theme(
-                                    data: new ThemeData(
-                                      primaryColor: Colors.grey[700],
-                                    ),
-                                    child: TextField(
-                                      keyboardType: TextInputType.number,
-                                      style: TextStyle(fontFamily: 'Segoe'),
-                                      controller: idCon,
-                                      textInputAction: TextInputAction.next,
-                                      cursorColor: Colors.grey[700],
-                                      decoration: InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: 'ID',
-                                          hintStyle: TextStyle(
-                                              fontFamily: 'Segoe',
-                                              fontSize: 12)),
-                                    ),
-                                  ),
+                                  // Theme(
+                                  //   data: new ThemeData(
+                                  //     primaryColor: Colors.grey[700],
+                                  //   ),
+                                  //   child: TextField(
+                                  //     keyboardType: TextInputType.number,
+                                  //     style: TextStyle(fontFamily: 'Segoe'),
+                                  //     controller: idCon,
+                                  //     textInputAction: TextInputAction.next,
+                                  //     cursorColor: Colors.grey[700],
+                                  //     decoration: InputDecoration(
+                                  //         enabledBorder: UnderlineInputBorder(
+                                  //             borderSide: BorderSide(
+                                  //                 color: Colors.black)),
+                                  //         hintText: 'ID',
+                                  //         hintStyle: TextStyle(
+                                  //             fontFamily: 'Segoe',
+                                  //             fontSize: 12)),
+                                  //   ),
+                                  // ),
                                   SizedBox(
                                     height: 0,
                                   ),
@@ -247,20 +245,7 @@ class _ExamTipsState extends State<ExamTips> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            if (idCon.text == '') {
-                                              fToast.showToast(
-                                                child: ToastWidget.toast(
-                                                    'ID cannot be empty',
-                                                    Icon(Icons.error,
-                                                        size: 20)),
-                                                toastDuration:
-                                                    Duration(seconds: 2),
-                                                gravity: ToastGravity.BOTTOM,
-                                              );
-                                              setState(() {
-                                                isLoading = false;
-                                              });
-                                            } else if (tipCon.text == '') {
+                                            if (tipCon.text == '') {
                                               fToast.showToast(
                                                 child: ToastWidget.toast(
                                                     'Tip cannot be empty',
@@ -305,55 +290,36 @@ class _ExamTipsState extends State<ExamTips> {
                                                   .instance.currentUser;
                                               if (user != null) {
                                                 try {
-                                                  QuerySnapshot snap =
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              'examtips')
-                                                          .get();
-                                                  int checkAlreadyExist = 0;
-                                                  snap.docs.forEach((element) {
-                                                    if (element['id'] ==
-                                                        idCon.text) {
-                                                      checkAlreadyExist++;
-                                                    } else {}
+                                                  FirebaseFirestore.instance
+                                                      .collection('examtips')
+                                                      .doc()
+                                                      .set({
+                                                    'created_at':
+                                                        Timestamp.now(),
+                                                    'tip': tipCon.text,
+                                                    'remember': remCon.text,
+                                                    'time': Timestamp.fromDate(
+                                                        convertDateFromString(
+                                                            date))
                                                   });
-
-                                                  if (checkAlreadyExist == 0) {
-                                                    try {
-                                                      FirebaseFirestore.instance
-                                                          .collection(
-                                                              'examtips')
-                                                          .doc()
-                                                          .set({
-                                                        'id': idCon.text,
-                                                        'tip': tipCon.text,
-                                                        'remember': remCon.text,
-                                                        'time': Timestamp.fromDate(
-                                                            convertDateFromString(
-                                                                date))
-                                                      });
-                                                      setState(() {
-                                                        isLoading = false;
-                                                      });
-                                                      Navigator.pop(context);
-                                                      fToast.showToast(
-                                                          child: ToastWidget.toast(
-                                                              'Tip added successfully',
-                                                              Icon(
-                                                                  Icons.done)));
-                                                      getTips();
-                                                    } catch (e) {}
-                                                  } else {
-                                                    fToast.showToast(
-                                                        child: ToastWidget.toast(
-                                                            'Tip with this ID already exist',
-                                                            Icon(Icons.error)));
-                                                    setState(() {
-                                                      isLoading = false;
-                                                    });
-                                                  }
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                  Navigator.pop(context);
+                                                  fToast.showToast(
+                                                      child: ToastWidget.toast(
+                                                          'Tip added successfully',
+                                                          Icon(Icons.done)));
+                                                  getTips();
                                                 } catch (e) {}
+                                              } else {
+                                                fToast.showToast(
+                                                    child: ToastWidget.toast(
+                                                        'Tip with this ID already exist',
+                                                        Icon(Icons.error)));
+                                                setState(() {
+                                                  isLoading = false;
+                                                });
                                               }
                                             }
                                           },
@@ -433,7 +399,7 @@ class _ExamTipsState extends State<ExamTips> {
                                   return AlertDialog(
                                     backgroundColor: buttonColor1,
                                     title: Text(
-                                      'Tip # ' + snap1[index]['id'],
+                                      'Tip # ',
                                       style: TextStyle(
                                           fontFamily: 'Segoe',
                                           fontWeight: FontWeight.bold),
@@ -517,8 +483,7 @@ class _ExamTipsState extends State<ExamTips> {
                                                                             Alignment.centerRight,
                                                                         child:
                                                                             Text(
-                                                                          'ID: ' +
-                                                                              snap1[index]['id'],
+                                                                          'ID: ',
                                                                           style: TextStyle(
                                                                               fontFamily: 'Segoe',
                                                                               fontWeight: FontWeight.bold,
@@ -905,7 +870,7 @@ class _ExamTipsState extends State<ExamTips> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Tip # ${snap1[index]['id']}',
+                                        'Tip # ${index + 1}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),

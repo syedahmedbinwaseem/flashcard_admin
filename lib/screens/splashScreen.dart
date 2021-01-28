@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flashcard_admin/screens/dashboard.dart';
@@ -21,17 +20,6 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => LoginScreen()));
       } else {
-        try {
-          DocumentSnapshot snap = await FirebaseFirestore.instance
-              .collection("admin")
-              .doc(admin.email)
-              .get();
-          // LocalUser.userData.username = snap['username'].toString();
-          // LocalUser.userData.email = snap['email'].toString();
-          // LocalUser.userData.isPaid = snap['isPaid'];
-        } catch (e) {
-          print(e);
-        }
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => Dashboard()));
       }

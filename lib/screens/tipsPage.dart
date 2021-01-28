@@ -62,7 +62,7 @@ class _TipsPageState extends State<TipsPage> {
           ),
           centerTitle: true,
           title: Text(
-            'Tip # ' + widget.allTips[widget.myIndex]['id'],
+            'Tip # ${widget.myIndex + 1}',
             style: TextStyle(color: Colors.black),
           ),
           backgroundColor: Colors.white,

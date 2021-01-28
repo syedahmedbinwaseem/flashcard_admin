@@ -39,6 +39,8 @@ dependencies:
   date_format: ^1.0.9
   flutter_slidable: ^0.5.7
   firebase_messaging: ^7.0.3
+  image_picker: ^0.6.7+21
+  firebase_storage: ^5.0.1
 
 dev_dependencies:
   flutter_test:

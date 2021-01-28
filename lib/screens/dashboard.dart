@@ -3,6 +3,7 @@ import 'package:flashcard_admin/screens/bottomNavigation.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flashcard_admin/screens/login.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -62,17 +63,17 @@ class _DashboardState extends State<Dashboard> {
                           child: Text(
                             'FLASHCARDS',
                             style: TextStyle(
-                              color: blackTextColor,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              shadows: [
-                                Shadow(
-                                    blurRadius: 5,
-                                    color: Colors.white,
-                                    offset: Offset(2, 2))
-                              ]),
-                        ),
-                      )),
+                                color: blackTextColor,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                shadows: [
+                                  Shadow(
+                                      blurRadius: 5,
+                                      color: Colors.white,
+                                      offset: Offset(2, 2))
+                                ]),
+                          ),
+                        )),
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => BottomNavigator(
@@ -301,8 +302,8 @@ class _DashboardState extends State<Dashboard> {
                 try {
                   await FirebaseAuth.instance.signOut();
                 } catch (e) {}
-                // Navigator.pushReplacement(context,
-                //     MaterialPageRoute(builder: (context) => LoginScreen()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
               },
               child: Container(
                   height: 40,
