@@ -49,10 +49,16 @@ class _DashboardState extends State<Dashboard> {
                       fit: BoxFit.fitHeight,
                     ),
                   )),
-
-                  SizedBox(
-                    height: 50,
+                  RichText(
+                    text: TextSpan(
+                        text: '\nAdmin Console',
+                        style: TextStyle(
+                            color: yellowTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                        children: []),
                   ),
+                  SizedBox(height: 20),
                   //FlashCards
                   GestureDetector(
                     child: Container(
@@ -107,11 +113,11 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         )),
                     onTap: () {
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //   builder: (context) => BottomNavigator(
-                      //     initIndex: 1,
-                      //   ),
-                      // ));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BottomNavigator(
+                          initIndex: 1,
+                        ),
+                      ));
                     },
                   ),
                   SizedBox(
@@ -235,10 +241,12 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
             Container(
-                height: 120,
-                child: Center(
-                    child: Image.asset('assets/images/logo.png',
-                        fit: BoxFit.fitWidth))),
+              height: 120,
+              child: Center(
+                child:
+                    Image.asset('assets/images/logo.png', fit: BoxFit.fitWidth),
+              ),
+            ),
             Divider(),
             FlatButton(
               onPressed: () {
@@ -251,46 +259,6 @@ class _DashboardState extends State<Dashboard> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Dashboard',
-                      style: TextStyle(
-                          color: textColor, fontWeight: FontWeight.bold),
-                    ),
-                  )),
-            ),
-            Divider(),
-            FlatButton(
-              onPressed: () {
-                Navigator.pop(context);
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => TipsHistory()));
-              },
-              child: Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(left: 20),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Tips History',
-                      style: TextStyle(
-                          color: textColor, fontWeight: FontWeight.bold),
-                    ),
-                  )),
-            ),
-            Divider(),
-            FlatButton(
-              onPressed: () {
-                Navigator.pop(context);
-
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => QuizHistory()));
-              },
-              child: Container(
-                  height: 40,
-                  padding: EdgeInsets.only(left: 20),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Quiz History',
                       style: TextStyle(
                           color: textColor, fontWeight: FontWeight.bold),
                     ),

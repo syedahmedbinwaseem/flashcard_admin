@@ -119,26 +119,6 @@ class _ExamTipsState extends State<ExamTips> {
                                         fontSize: 20),
                                   ),
                                   SizedBox(height: 10),
-                                  // Theme(
-                                  //   data: new ThemeData(
-                                  //     primaryColor: Colors.grey[700],
-                                  //   ),
-                                  //   child: TextField(
-                                  //     keyboardType: TextInputType.number,
-                                  //     style: TextStyle(fontFamily: 'Segoe'),
-                                  //     controller: idCon,
-                                  //     textInputAction: TextInputAction.next,
-                                  //     cursorColor: Colors.grey[700],
-                                  //     decoration: InputDecoration(
-                                  //         enabledBorder: UnderlineInputBorder(
-                                  //             borderSide: BorderSide(
-                                  //                 color: Colors.black)),
-                                  //         hintText: 'ID',
-                                  //         hintStyle: TextStyle(
-                                  //             fontFamily: 'Segoe',
-                                  //             fontSize: 12)),
-                                  //   ),
-                                  // ),
                                   SizedBox(
                                     height: 0,
                                   ),
@@ -363,7 +343,7 @@ class _ExamTipsState extends State<ExamTips> {
             ),
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_outlined),
+            icon: Icon(Icons.home),
             color: Colors.black,
             onPressed: () {
               Navigator.pop(context);
@@ -371,7 +351,7 @@ class _ExamTipsState extends State<ExamTips> {
           ),
           centerTitle: true,
           title: Text(
-            'Tips Hsitory',
+            'Exam Tips',
             style: TextStyle(color: Colors.black),
           ),
           backgroundColor: Colors.white,

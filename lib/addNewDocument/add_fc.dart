@@ -219,14 +219,14 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                             ),
                             SizedBox(height: 10),
                             Container(
-                              padding: EdgeInsets.only(right: 10),
                               height: 40,
                               width: MediaQuery.of(context).size.width * 0.9,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
+                                  FlatButton(
+                                    minWidth: 40,
+                                    onPressed: () {
                                       Navigator.pop(context);
                                       fcName.clear();
                                       fcBody.clear();
@@ -238,50 +238,52 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 30),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
+                                  FlatButton(
+                                    minWidth: 40,
+                                    onPressed: () async {
+                                      if (fKey.currentState.validate()) {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
 
-                                      await uploadFile().then((value) async {
-                                        try {
-                                          DocumentReference doc =
-                                              FirebaseFirestore.instance
-                                                  .collection('level1')
-                                                  .doc(widget.docId)
-                                                  .collection('readings')
-                                                  .doc(widget.readId)
-                                                  .collection('flashcards')
-                                                  .doc();
-                                          await doc.set({
-                                            'created_at': Timestamp.now(),
-                                            'id': doc.id,
-                                            'title': fcName.text,
-                                            'body': fcBody.text,
-                                            'img_link': imagePath == null ||
-                                                    imagePath == ''
-                                                ? null
-                                                : imagePath
-                                          });
-                                        } catch (e) {
-                                          Fluttertoast.showToast(
-                                            msg: "Something went wrong!",
-                                            toastLength: Toast.LENGTH_LONG,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 3,
-                                            backgroundColor: buttonColor1,
-                                            textColor: Colors.white,
-                                            fontSize: 15,
-                                          );
-                                        }
-                                      });
+                                        await uploadFile().then((value) async {
+                                          try {
+                                            DocumentReference doc =
+                                                FirebaseFirestore.instance
+                                                    .collection('level1')
+                                                    .doc(widget.docId)
+                                                    .collection('readings')
+                                                    .doc(widget.readId)
+                                                    .collection('flashcards')
+                                                    .doc();
+                                            await doc.set({
+                                              'created_at': Timestamp.now(),
+                                              'id': doc.id,
+                                              'title': fcName.text,
+                                              'body': fcBody.text,
+                                              'img_link': imagePath == null ||
+                                                      imagePath == ''
+                                                  ? null
+                                                  : imagePath
+                                            });
+                                          } catch (e) {
+                                            Fluttertoast.showToast(
+                                              msg: "Something went wrong!",
+                                              toastLength: Toast.LENGTH_LONG,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 3,
+                                              backgroundColor: buttonColor1,
+                                              textColor: Colors.white,
+                                              fontSize: 15,
+                                            );
+                                          }
+                                        });
 
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        isLoading = false;
-                                      });
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      }
                                     },
                                     child: Text(
                                       'Add',

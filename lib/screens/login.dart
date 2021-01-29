@@ -221,6 +221,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: Stack(
                                             children: [
                                               TextFormField(
+                                                textCapitalization:
+                                                    TextCapitalization
+                                                        .sentences,
                                                 style: TextStyle(
                                                     color: textColor,
                                                     fontFamily: 'Segoe'),

@@ -7,7 +7,7 @@ class ToastWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
-        color: buttonColor2,
+        color: buttonColor1,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -609,33 +609,51 @@ class _FlashCardState extends State<FlashCard>
                                                   ),
                                                 ),
                                                 secondaryActions: <Widget>[
-                                                  IconSlideAction(
-                                                    caption: 'Edit',
-                                                    color: Colors.black45,
-                                                    icon: Icons.edit,
-                                                    onTap: () {
-                                                      _editReading(
-                                                          docId,
-                                                          snapshot.data
-                                                              .docs[index].id,
-                                                          snapshot.data
-                                                                  .docs[index]
-                                                              ['title']);
-                                                    },
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    child: IconSlideAction(
+                                                      caption: 'Edit',
+                                                      color: Colors.black45,
+                                                      icon: Icons.edit,
+                                                      onTap: () {
+                                                        _editReading(
+                                                            docId,
+                                                            snapshot.data
+                                                                .docs[index].id,
+                                                            snapshot.data
+                                                                    .docs[index]
+                                                                ['title']);
+                                                      },
+                                                    ),
                                                   ),
-                                                  IconSlideAction(
-                                                    caption: 'Delete',
-                                                    color: Colors.red,
-                                                    icon: Icons.delete,
-                                                    onTap: () {
-                                                      _deleteReadings(
-                                                          docId,
-                                                          snapshot.data
-                                                              .docs[index].id,
-                                                          snapshot.data
-                                                                  .docs[index]
-                                                              ['title']);
-                                                    },
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topRight: Radius
+                                                                .circular(10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    child: IconSlideAction(
+                                                      caption: 'Delete',
+                                                      color: Colors.red,
+                                                      icon: Icons.delete,
+                                                      onTap: () {
+                                                        _deleteReadings(
+                                                            docId,
+                                                            snapshot.data
+                                                                .docs[index].id,
+                                                            snapshot.data
+                                                                    .docs[index]
+                                                                ['title']);
+                                                      },
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -823,52 +841,72 @@ class _FlashCardState extends State<FlashCard>
                                                       ),
                                                     ),
                                                     secondaryActions: <Widget>[
-                                                      IconSlideAction(
-                                                        caption: 'Edit',
-                                                        color: Colors.black45,
-                                                        icon: Icons.edit,
-                                                        onTap: () {
-                                                          setState(() {
-                                                            added = false;
-                                                          });
-                                                          _editFC(
-                                                              docId,
-                                                              readId,
-                                                              snapshot
-                                                                  .data
-                                                                  .docs[index]
-                                                                  .id,
-                                                              snapshot.data
-                                                                          .docs[
-                                                                      index]
-                                                                  ['title'],
-                                                              snapshot.data
-                                                                          .docs[
-                                                                      index]
-                                                                  ['body'],
-                                                              snapshot.data
-                                                                          .docs[
-                                                                      index]
-                                                                  ['img_link']);
-                                                        },
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                        child: IconSlideAction(
+                                                          caption: 'Edit',
+                                                          color: Colors.black45,
+                                                          icon: Icons.edit,
+                                                          onTap: () {
+                                                            setState(() {
+                                                              added = false;
+                                                            });
+                                                            _editFC(
+                                                                docId,
+                                                                readId,
+                                                                snapshot
+                                                                    .data
+                                                                    .docs[index]
+                                                                    .id,
+                                                                snapshot.data
+                                                                            .docs[
+                                                                        index]
+                                                                    ['title'],
+                                                                snapshot.data
+                                                                            .docs[
+                                                                        index]
+                                                                    ['body'],
+                                                                snapshot.data
+                                                                            .docs[
+                                                                        index][
+                                                                    'img_link']);
+                                                          },
+                                                        ),
                                                       ),
-                                                      IconSlideAction(
-                                                        caption: 'Delete',
-                                                        color: Colors.red,
-                                                        icon: Icons.delete,
-                                                        onTap: () {
-                                                          _deleteFC(
-                                                              docId,
-                                                              readId,
-                                                              snapshot
-                                                                  .data
-                                                                  .docs[index]
-                                                                  .id,
-                                                              snapshot.data
-                                                                          .docs[
-                                                                      index]
-                                                                  ['title']);
-                                                        },
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                        child: IconSlideAction(
+                                                          caption: 'Delete',
+                                                          color: Colors.red,
+                                                          icon: Icons.delete,
+                                                          onTap: () {
+                                                            _deleteFC(
+                                                                docId,
+                                                                readId,
+                                                                snapshot
+                                                                    .data
+                                                                    .docs[index]
+                                                                    .id,
+                                                                snapshot.data
+                                                                            .docs[
+                                                                        index]
+                                                                    ['title']);
+                                                          },
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -1424,42 +1462,61 @@ class _FlashCardState extends State<FlashCard>
                                                         ),
                                                         secondaryActions: <
                                                             Widget>[
-                                                          IconSlideAction(
-                                                            caption: 'Edit',
-                                                            color:
-                                                                Colors.black45,
-                                                            icon: Icons.edit,
-                                                            onTap: () {
-                                                              _editSession(
-                                                                  snapshot
-                                                                      .data
-                                                                      .docs[
-                                                                          index]
-                                                                      .id,
-                                                                  snapshot.data
-                                                                              .docs[
-                                                                          index]
-                                                                      [
-                                                                      'title']);
-                                                            },
+                                                          ClipRRect(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            child:
+                                                                IconSlideAction(
+                                                              caption: 'Edit',
+                                                              color: Colors
+                                                                  .black45,
+                                                              icon: Icons.edit,
+                                                              onTap: () {
+                                                                _editSession(
+                                                                    snapshot
+                                                                        .data
+                                                                        .docs[
+                                                                            index]
+                                                                        .id,
+                                                                    snapshot.data
+                                                                            .docs[index]
+                                                                        [
+                                                                        'title']);
+                                                              },
+                                                            ),
                                                           ),
-                                                          IconSlideAction(
-                                                            caption: 'Delete',
-                                                            color: Colors.red,
-                                                            icon: Icons.delete,
-                                                            onTap: () {
-                                                              _deleteSession(
-                                                                  snapshot
-                                                                      .data
-                                                                      .docs[
-                                                                          index]
-                                                                      .id,
-                                                                  snapshot.data
-                                                                              .docs[
-                                                                          index]
-                                                                      [
-                                                                      'title']);
-                                                            },
+                                                          ClipRRect(
+                                                            borderRadius: BorderRadius.only(
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            child:
+                                                                IconSlideAction(
+                                                              caption: 'Delete',
+                                                              color: Colors.red,
+                                                              icon:
+                                                                  Icons.delete,
+                                                              onTap: () {
+                                                                _deleteSession(
+                                                                    snapshot
+                                                                        .data
+                                                                        .docs[
+                                                                            index]
+                                                                        .id,
+                                                                    snapshot.data
+                                                                            .docs[index]
+                                                                        [
+                                                                        'title']);
+                                                              },
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
@@ -1514,6 +1571,7 @@ class _FlashCardState extends State<FlashCard>
                               primaryColor: Colors.grey[700],
                             ),
                             child: TextFormField(
+                              textCapitalization: TextCapitalization.sentences,
                               keyboardType: TextInputType.text,
                               style: TextStyle(fontFamily: 'Segoe'),
                               controller: textController,
@@ -1537,14 +1595,14 @@ class _FlashCardState extends State<FlashCard>
                             height: 10,
                           ),
                           Container(
-                            padding: EdgeInsets.only(right: 10),
                             height: 40,
                             width: MediaQuery.of(context).size.width * 0.9,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
+                                FlatButton(
+                                  minWidth: 40,
+                                  onPressed: () {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
@@ -1554,11 +1612,9 @@ class _FlashCardState extends State<FlashCard>
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 30,
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
+                                FlatButton(
+                                  minWidth: 40,
+                                  onPressed: () async {
                                     if (fKey.currentState.validate()) {
                                       setState(() {
                                         isLoading = true;
@@ -1618,14 +1674,14 @@ class _FlashCardState extends State<FlashCard>
                   ),
                   SizedBox(height: 10),
                   Container(
-                      padding: EdgeInsets.only(right: 10),
                       height: 40,
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          GestureDetector(
-                            onTap: () {
+                          FlatButton(
+                            minWidth: 30,
+                            onPressed: () {
                               Navigator.pop(context);
                             },
                             child: Text(
@@ -1635,9 +1691,9 @@ class _FlashCardState extends State<FlashCard>
                               ),
                             ),
                           ),
-                          SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () async {
+                          FlatButton(
+                            minWidth: 30,
+                            onPressed: () async {
                               setState(() {
                                 isLoading = true;
                               });
@@ -1703,6 +1759,7 @@ class _FlashCardState extends State<FlashCard>
                               primaryColor: Colors.grey[700],
                             ),
                             child: TextFormField(
+                              textCapitalization: TextCapitalization.sentences,
                               keyboardType: TextInputType.text,
                               style: TextStyle(fontFamily: 'Segoe'),
                               controller: textController,
@@ -1726,14 +1783,14 @@ class _FlashCardState extends State<FlashCard>
                             height: 10,
                           ),
                           Container(
-                            padding: EdgeInsets.only(right: 10),
                             height: 40,
                             width: MediaQuery.of(context).size.width * 0.9,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
+                                FlatButton(
+                                  minWidth: 40,
+                                  onPressed: () {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
@@ -1743,11 +1800,9 @@ class _FlashCardState extends State<FlashCard>
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 30,
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
+                                FlatButton(
+                                  minWidth: 40,
+                                  onPressed: () async {
                                     if (fKey.currentState.validate()) {
                                       setState(() {
                                         isLoading = true;
@@ -1809,14 +1864,14 @@ class _FlashCardState extends State<FlashCard>
                   ),
                   SizedBox(height: 10),
                   Container(
-                      padding: EdgeInsets.only(right: 10),
                       height: 40,
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          GestureDetector(
-                            onTap: () {
+                          FlatButton(
+                            minWidth: 30,
+                            onPressed: () {
                               Navigator.pop(context);
                             },
                             child: Text(
@@ -1826,9 +1881,9 @@ class _FlashCardState extends State<FlashCard>
                               ),
                             ),
                           ),
-                          SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () async {
+                          FlatButton(
+                            minWidth: 30,
+                            onPressed: () async {
                               setState(() {
                                 isLoading = true;
                               });
@@ -1900,6 +1955,8 @@ class _FlashCardState extends State<FlashCard>
                                   primaryColor: Colors.grey[700],
                                 ),
                                 child: TextFormField(
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   keyboardType: TextInputType.text,
                                   style: TextStyle(fontFamily: 'Segoe'),
                                   controller: textController,
@@ -1924,6 +1981,8 @@ class _FlashCardState extends State<FlashCard>
                                   primaryColor: Colors.grey[700],
                                 ),
                                 child: TextFormField(
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   keyboardType: TextInputType.text,
                                   style: TextStyle(fontFamily: 'Segoe'),
                                   controller: bodyController,
@@ -2006,62 +2065,75 @@ class _FlashCardState extends State<FlashCard>
                                                             fontSize: 13),
                                                       ))),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 10),
-                                              child: Container(
-                                                height: 65,
-                                                width: 65,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: imgUrl == null
-                                                        ? null
-                                                        : imgUrl,
-                                                    fit: BoxFit.cover,
-                                                    progressIndicatorBuilder:
-                                                        (context, url,
-                                                                downloadProgress) =>
-                                                            Center(
-                                                      child: SizedBox(
-                                                        height: 35,
-                                                        width: 35,
+                                            imgUrl == null
+                                                ? Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 10),
+                                                    child: Icon(Icons
+                                                        .add_a_photo_outlined),
+                                                  )
+                                                : Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 10),
+                                                    child: Container(
+                                                      height: 65,
+                                                      width: 65,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
                                                         child:
-                                                            CircularProgressIndicator(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .white,
-                                                                valueColor:
-                                                                    AlwaysStoppedAnimation<
-                                                                        Color>(
-                                                                  Color
-                                                                      .fromRGBO(
-                                                                          102,
-                                                                          126,
-                                                                          234,
-                                                                          1),
-                                                                ),
-                                                                strokeWidth: 3,
-                                                                value: downloadProgress
-                                                                    .progress),
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              imgUrl == null
+                                                                  ? null
+                                                                  : imgUrl,
+                                                          fit: BoxFit.cover,
+                                                          progressIndicatorBuilder:
+                                                              (context, url,
+                                                                      downloadProgress) =>
+                                                                  Center(
+                                                            child: SizedBox(
+                                                              height: 35,
+                                                              width: 35,
+                                                              child:
+                                                                  CircularProgressIndicator(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .white,
+                                                                      valueColor:
+                                                                          AlwaysStoppedAnimation<
+                                                                              Color>(
+                                                                        Color.fromRGBO(
+                                                                            102,
+                                                                            126,
+                                                                            234,
+                                                                            1),
+                                                                      ),
+                                                                      strokeWidth:
+                                                                          3,
+                                                                      value: downloadProgress
+                                                                          .progress),
+                                                            ),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Icon(
+                                                            Icons
+                                                                .add_a_photo_outlined,
+                                                            size: 23,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Icon(
-                                                      Icons
-                                                          .add_a_photo_outlined,
-                                                      size: 23,
-                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                 ),
@@ -2070,14 +2142,14 @@ class _FlashCardState extends State<FlashCard>
                                 height: 10,
                               ),
                               Container(
-                                padding: EdgeInsets.only(right: 10),
                                 height: 40,
                                 width: MediaQuery.of(context).size.width * 0.9,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    GestureDetector(
-                                      onTap: () {
+                                    FlatButton(
+                                      minWidth: 40,
+                                      onPressed: () {
                                         Navigator.pop(context);
                                       },
                                       child: Text(
@@ -2087,11 +2159,9 @@ class _FlashCardState extends State<FlashCard>
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 30,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
+                                    FlatButton(
+                                      minWidth: 40,
+                                      onPressed: () async {
                                         setState(() {
                                           isLoading = true;
                                         });
@@ -2162,14 +2232,14 @@ class _FlashCardState extends State<FlashCard>
                   ),
                   SizedBox(height: 10),
                   Container(
-                      padding: EdgeInsets.only(right: 10),
                       height: 40,
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          GestureDetector(
-                            onTap: () {
+                          FlatButton(
+                            minWidth: 30,
+                            onPressed: () {
                               Navigator.pop(context);
                             },
                             child: Text(
@@ -2179,9 +2249,9 @@ class _FlashCardState extends State<FlashCard>
                               ),
                             ),
                           ),
-                          SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () async {
+                          FlatButton(
+                            minWidth: 30,
+                            onPressed: () async {
                               setState(() {
                                 isLoading = true;
                               });
