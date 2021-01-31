@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashcard_admin/NotificationManager/pushNotificationManager.dart';
 import 'package:flashcard_admin/screens/tipsPage.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
@@ -8,6 +9,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flashcard_admin/utils/toast_widget.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -151,7 +153,7 @@ class _ExamTipsState extends State<ExamTips> {
                                     child: TextField(
                                       style: TextStyle(fontFamily: 'Segoe'),
                                       controller: remCon,
-                                      textInputAction: TextInputAction.next,
+                                      maxLines: 3,
                                       cursorColor: Colors.grey[700],
                                       decoration: InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -282,6 +284,11 @@ class _ExamTipsState extends State<ExamTips> {
                                                         convertDateFromString(
                                                             date))
                                                   });
+                                                  NotificationManager notificationManager=new NotificationManager();
+                                                  notificationManager.sendAndRetrieveMessage('', 
+                                                  "Tip of Day!",
+                                                  "CFA Nodal Trainer added new tip of day for you.");
+                                                
                                                   setState(() {
                                                     isLoading = false;
                                                   });
@@ -813,6 +820,7 @@ class _ExamTipsState extends State<ExamTips> {
                                     ],
                                   );
                                 });
+                          
                           },
                           onTap: () {
                             Navigator.push(
@@ -825,59 +833,496 @@ class _ExamTipsState extends State<ExamTips> {
                               ),
                             );
                           },
-                          child: Container(
-                            height: 80,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              color: buttonColor2,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                SizedBox(width: 20),
-                                CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  radius: 20,
-                                  child: Image.asset(
-                                      'assets/images/lightbulb.png'),
+                          child: Slidable(
+                            actionPane: SlidableDrawerActionPane(),
+                            secondaryActions: <Widget>[
+                              ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius
+                                        .circular(
+                                            10),
+                                    bottomLeft: Radius
+                                        .circular(
+                                            10)),
+                                child:
+                                    IconSlideAction(
+                                  caption: 'Edit',
+                                  color: Colors
+                                      .black45,
+                                  icon: Icons.edit,
+                                  onTap: () {
+                                    setState(() {
+                                      tipECon.text = snap1[index]['tip'];
+                                      remECon.text =
+                                          snap1[index]['remember'];
+                                    });
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return StatefulBuilder(builder:
+                                            (context, setState) {
+                                          return ModalProgressHUD(
+                                            inAsyncCall: isLoading,
+                                            child: Dialog(
+                                              insetPadding:
+                                                  EdgeInsets.all(0),
+                                              shape:
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius
+                                                              .circular(
+                                                                  10)),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
+                                                },
+                                                child:
+                                                    SingleChildScrollView(
+                                                  child: Container(
+                                                    width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width *
+                                                        0.9,
+                                                    padding:
+                                                        EdgeInsets.all(
+                                                            10),
+                                                    decoration:
+                                                        GlobalWidget
+                                                            .backGround(),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize
+                                                              .min,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              'Edit tip',
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'Segoe',
+                                                                  fontWeight: FontWeight
+                                                                      .bold,
+                                                                  fontSize:
+                                                                      20),
+                                                            ),
+                                                            Expanded(
+                                                              child:
+                                                                  Align(
+                                                                alignment:
+                                                                    Alignment.centerRight,
+                                                                child:
+                                                                    Text(
+                                                                  ' ',
+                                                                  style: TextStyle(
+                                                                      fontFamily: 'Segoe',
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontSize: 20),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                            height: 10),
+                                                        Theme(
+                                                          data:
+                                                              new ThemeData(
+                                                            primaryColor:
+                                                                Colors.grey[
+                                                                    700],
+                                                          ),
+                                                          child: TextField(
+                                                              style: TextStyle(fontFamily: 'Segoe'),
+                                                              controller: tipECon,
+                                                              textInputAction: TextInputAction.next,
+                                                              cursorColor: Colors.grey[700],
+                                                              decoration: InputDecoration(
+                                                                enabledBorder:
+                                                                    UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                                                                labelText:
+                                                                    'Tip',
+                                                                labelStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontFamily:
+                                                                        'Segoe',
+                                                                    fontSize:
+                                                                        12),
+                                                                // hintText:
+                                                                //     'Tip',
+                                                                // hintStyle: TextStyle(
+                                                                //     fontFamily: 'Segoe',
+                                                                //     fontSize: 12),
+                                                              )),
+                                                        ),
+                                                        Theme(
+                                                          data:
+                                                              new ThemeData(
+                                                            primaryColor:
+                                                                Colors.grey[
+                                                                    700],
+                                                          ),
+                                                          child: TextField(
+                                                              style: TextStyle(fontFamily: 'Segoe'),
+                                                              controller: remECon,
+                                                              maxLines: 4,
+                                                              cursorColor: Colors.grey[700],
+                                                              decoration: InputDecoration(
+                                                                enabledBorder:
+                                                                    UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                                                                labelText:
+                                                                    'Remember',
+                                                                labelStyle: TextStyle(
+                                                                    fontFamily:
+                                                                        'Segoe',
+                                                                    color:
+                                                                        Colors.black,
+                                                                    fontSize: 12),
+                                                              )
+                                                              // hintText:
+                                                              //     'Remember',
+                                                              // hintStyle: TextStyle(
+                                                              //     fontFamily:
+                                                              //         'Segoe',
+                                                              //     fontSize:
+                                                              //         12)),
+                                                              ),
+                                                        ),
+                                                        DateTimePicker(
+                                                          decoration: InputDecoration(
+                                                              focusColor: Colors.black,
+                                                              labelText: 'Date',
+                                                              labelStyle: TextStyle(color: Colors.black, fontFamily: 'Segoe', fontSize: 12),
+                                                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                                                              border: UnderlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide(color: Colors.black),
+                                                              ),
+                                                              disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                                                              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black))),
+                                                          cursorColor:
+                                                              Colors
+                                                                  .black,
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .black,
+                                                              fontFamily:
+                                                                  'Segoe',
+                                                              fontSize:
+                                                                  12),
+                                                          initialValue:
+                                                              convertStringFromDate(
+                                                                  snap1[index]
+                                                                      [
+                                                                      'time']),
+                                                          firstDate:
+                                                              DateTime(
+                                                                  2000),
+                                                          lastDate:
+                                                              DateTime(
+                                                                  2100),
+                                                          dateLabelText:
+                                                              'Date',
+                                                          onChanged: (val) =>
+                                                              setState(
+                                                                  () {
+                                                            date = val;
+                                                          }),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Container(
+                                                          padding: EdgeInsets
+                                                              .only(
+                                                                  right:
+                                                                      10),
+                                                          height: 40,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.9,
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              GestureDetector(
+                                                                onTap:
+                                                                    () {
+                                                                  tipECon
+                                                                      .clear();
+                                                                  remECon
+                                                                      .clear();
+
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child: Text(
+                                                                    'Cancel',
+                                                                    style:
+                                                                        TextStyle(fontFamily: "Segoe", fontWeight: FontWeight.bold)),
+                                                              ),
+                                                              SizedBox(
+                                                                  width:
+                                                                      20),
+                                                              GestureDetector(
+                                                                onTap:
+                                                                    () async {
+                                                                  setState(
+                                                                      () {
+                                                                    isLoading =
+                                                                        true;
+                                                                  });
+                                                                  if (tipECon.text ==
+                                                                      '') {
+                                                                    fToast.showToast(child: ToastWidget.toast('Tip cannot be empty', Icon(Icons.error)));
+                                                                    setState(() {
+                                                                      isLoading = false;
+                                                                    });
+                                                                  } else if (remECon.text ==
+                                                                      '') {
+                                                                    fToast.showToast(child: ToastWidget.toast('Remember cannot be empty', Icon(Icons.error)));
+                                                                    setState(() {
+                                                                      isLoading = false;
+                                                                    });
+                                                                  } else if (date ==
+                                                                      '') {
+                                                                    fToast.showToast(child: ToastWidget.toast('Date cannot be empty', Icon(Icons.error)));
+                                                                    setState(() {
+                                                                      isLoading = false;
+                                                                    });
+                                                                  } else {
+                                                                    try {
+                                                                      FirebaseFirestore.instance.collection('examtips').doc(snap1[index].id).update({
+                                                                        'tip': tipECon.text,
+                                                                        'remember': remECon.text,
+                                                                        'time': convertDateFromString(date)
+                                                                      });
+                                                                      Navigator.pop(context);
+                                                                      getTips();
+                                                                      setState(() {
+                                                                        isLoading = false;
+                                                                      });
+                                                                      fToast.showToast(child: ToastWidget.toast('Tip updated', Icon(Icons.done)));
+                                                                    } catch (e) {
+                                                                      setState(() {
+                                                                        isLoading = false;
+                                                                      });
+                                                                    }
+                                                                  }
+                                                                },
+                                                                child: Text(
+                                                                    'Edit',
+                                                                    style: TextStyle(
+                                                                        fontFamily: "Segoe",
+                                                                        fontWeight: FontWeight.bold,
+                                                                        color: blueTextColor)),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                      });
+                                
+                                  },
                                 ),
-                                SizedBox(width: 15),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Tip # ${index + 1}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        getTime(index)
-                                            .toString()
-                                            .substring(0, 10),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 13),
-                                      )
-                                    ],
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius
+                                        .circular(
+                                            10),
+                                    bottomRight: Radius
+                                        .circular(
+                                            10)),
+                                child:
+                                    IconSlideAction(
+                                  caption: 'Delete',
+                                  color: Colors.red,
+                                  icon:
+                                      Icons.delete,
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Are you sure?',
+                                            style: TextStyle(
+                                                fontFamily: 'Segoe',
+                                                fontWeight:
+                                                    FontWeight.bold),
+                                          ),
+                                          content: isLoading == true
+                                              ? Container(
+                                                  height: 40,
+                                                  width: 40,
+                                                  child: Center(
+                                                    child: SizedBox(
+                                                        height: 35,
+                                                        width: 35,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation<
+                                                                  Color>(
+                                                            Color
+                                                                .fromRGBO(
+                                                                    102,
+                                                                    126,
+                                                                    234,
+                                                                    1),
+                                                          ),
+                                                          strokeWidth:
+                                                              3,
+                                                        )),
+                                                  ),
+                                                )
+                                              : null,
+                                          actionsPadding:
+                                              EdgeInsets.only(
+                                                  bottom: 10,
+                                                  right: 10),
+                                          actions: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  fontFamily: 'Segoe',
+                                                  fontWeight:
+                                                      FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
+                                                try {
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection(
+                                                          'examtips')
+                                                      .doc(snap1[index]
+                                                          .id)
+                                                      .delete();
+                                                  fToast.showToast(
+                                                      child: ToastWidget.toast(
+                                                          'Tip Deleted',
+                                                          Icon(Icons
+                                                              .done)));
+
+                                                  Navigator.pop(
+                                                      context);
+                                                  initState();
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                } catch (e) {
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                  print(e);
+                                                  // fToast.showToast(
+                                                  //     child: ToastWidget.toast(
+                                                  //         'Unexpected error occured',
+                                                  //         Icon(Icons
+                                                  //             .error)));
+                                                }
+                                              },
+                                              child: Text(
+                                                'Yes',
+                                                style: TextStyle(
+                                                    fontFamily: 'Segoe',
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    color: Colors.red),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                  },
+                                ),
+                              ),
+                            ],
+                            child: Container(
+                              height: 80,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color: buttonColor2,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 20),
+                                  CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    radius: 20,
+                                    child: Image.asset(
+                                        'assets/images/lightbulb.png'),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 20),
-                                      child: Icon(
-                                          Icons.arrow_forward_ios_outlined),
+                                  SizedBox(width: 15),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Tip # ${index + 1}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          getTime(index)
+                                              .toString()
+                                              .substring(0, 10),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 13),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                )
-                              ],
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 20),
+                                        child: Icon(
+                                            Icons.arrow_forward_ios_outlined),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),

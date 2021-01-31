@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashcard_admin/NotificationManager/pushNotificationManager.dart';
 import 'package:flashcard_admin/screens/bottomNavigation.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flashcard_admin/screens/login.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -13,8 +16,10 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   List<String> primaryEmails;
   bool primary;
+  bool isLoading;
   @override
   void initState() {
+    isLoading=false;
     primary = false;
     // Future.delayed(Duration(seconds: 5), () {
     //   setState(() {});
@@ -25,7 +30,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
-
+    // isLoading=false;
     return Container(
       decoration: GlobalWidget.backGround(),
       child: Scaffold(
@@ -41,14 +46,35 @@ class _DashboardState extends State<Dashboard> {
                     height: 70,
                   ),
                   Center(
-                      child: Container(
+                      child: GestureDetector(
+                        onTap: ()async{
+                          try{
+                              NotificationManager notificationManager=new NotificationManager();
+                              await notificationManager.sendAndRetrieveMessage('faCrDslYQqSp9Ved9uLX7o:APA91bHc-ef6JccxneZ3Z5ELsAxMOlwP37BFOOJGavIJhS_jWvJ-ZWu-s8BdkkQEr1K1eYIJYy23ykrkPulpnpeBDBO2nuHVDIlCINJ0hNS9VrGWZpXrQKIjiEjSbsqLUDKX9TEvnVXY',
+                              "New Flashcard adeed",
+                              "CFA Nodal Trainer added new Flashcard!");
+                            }catch(e){
+                              print('RRRRRRRRRRRRRRRRRRRR $e');
+                              Fluttertoast.showToast(
+                              msg: "Error $e",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 3,
+                              backgroundColor: buttonColor1,
+                              textColor: Colors.white,
+                              fontSize: 15,
+                            );
+                            }
+                        },
+                        child: Container(
                     height: 150,
                     decoration: BoxDecoration(),
                     child: Image.asset(
-                      'assets/images/logo.png',
-                      fit: BoxFit.fitHeight,
+                        'assets/images/logo.png',
+                        fit: BoxFit.fitHeight,
                     ),
-                  )),
+                  ),
+                      )),
                   RichText(
                     text: TextSpan(
                         text: '\nAdmin Console',
@@ -286,25 +312,25 @@ class _DashboardState extends State<Dashboard> {
                   )),
             ),
             Divider(),
-            FlatButton(
-              onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => TermsAndConditions()));
-              },
-              child: Container(
-                  height: 40,
-                  padding: EdgeInsets.only(left: 20),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Terms And Conditions',
-                      style: TextStyle(
-                          color: textColor, fontWeight: FontWeight.bold),
-                    ),
-                  )),
-            )
+            // FlatButton(
+            //   onPressed: () {
+            //     // Navigator.push(
+            //     //     context,
+            //     //     MaterialPageRoute(
+            //     //         builder: (context) => TermsAndConditions()));
+            //   },
+            //   child: Container(
+            //       height: 40,
+            //       padding: EdgeInsets.only(left: 20),
+            //       child: Align(
+            //         alignment: Alignment.centerLeft,
+            //         child: Text(
+            //           'Terms And Conditions',
+            //           style: TextStyle(
+            //               color: textColor, fontWeight: FontWeight.bold),
+            //         ),
+            //       )),
+            // )
           ],
         ),
       ),

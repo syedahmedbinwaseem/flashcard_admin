@@ -44,7 +44,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
             selectedFontSize: MediaQuery.of(context).size.width * 0.037,
             currentIndex: currentIndex,
             backgroundColor: buttonColor2,
-            selectedItemColor: headingColor,
+            selectedItemColor: Colors.white,
             unselectedItemColor: textColor,
             showUnselectedLabels: false,
             onTap: (index) {
@@ -62,7 +62,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
                       width: 20,
                       child: Icon(
                         Icons.credit_card_sharp,
-                        color: currentIndex == 0 ? textColor : Colors.black,
+                        color: currentIndex == 0 ? Colors.white : Colors.black,
                       ),
                     ),
                     SizedBox(height: 5),
@@ -78,7 +78,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
                       width: 20,
                       child: Image.asset(
                         'assets/images/quiz.png',
-                        color: currentIndex == 1 ? textColor : Colors.black,
+                        color: currentIndex == 1 ? Colors.white : Colors.black,
                       ),
                     ),
                     SizedBox(height: 5),
@@ -94,7 +94,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
                       width: 20,
                       child: Image.asset(
                         'assets/images/sticker.png',
-                        color: currentIndex == 2 ? textColor : Colors.black,
+                        color: currentIndex == 2 ? Colors.white : Colors.black,
                       ),
                     ),
                     SizedBox(height: 5),

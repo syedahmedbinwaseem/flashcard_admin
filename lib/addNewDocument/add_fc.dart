@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flashcard_admin/NotificationManager/pushNotificationManager.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flashcard_admin/utils/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -29,9 +31,12 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
 
   GlobalKey<FormState> fKey = GlobalKey<FormState>();
   bool isLoading;
-
+  String sessionName;
+  String readingName;
+  
   @override
   void initState() {
+    _getSessionReading();
     isLoading = false;
     super.initState();
     fToast = FToast();
@@ -156,6 +161,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                       ? "Field required"
                                       : null;
                                 },
+                                maxLines: 5,
                                 style: TextStyle(fontFamily: 'Segoe'),
                                 controller: fcBody,
                                 cursorColor: Colors.grey[700],
@@ -245,7 +251,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                         setState(() {
                                           isLoading = true;
                                         });
-
+                                         
                                         await uploadFile().then((value) async {
                                           try {
                                             DocumentReference doc =
@@ -278,7 +284,21 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                             );
                                           }
                                         });
-
+                                        
+                                        NotificationManager notificationManager=new NotificationManager();
+                                        notificationManager.sendAndRetrieveMessage('', 
+                                        "New Flashcard added",
+                                        "CFA Nodal Trainer added new Flashcard in Session \'$sessionName\' under Reading \'$readingName\'.");
+                                      
+                                        Fluttertoast.showToast(
+                                          msg: "Successfully Added new FlashCard!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 3,
+                                          backgroundColor: buttonColor1,
+                                          textColor: Colors.white,
+                                          fontSize: 15,
+                                        );
                                         Navigator.pop(context);
                                         setState(() {
                                           isLoading = false;
@@ -302,6 +322,20 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                 ),
               ))),
     );
+  }
+
+  _getSessionReading()async{
+    DocumentSnapshot sessionSnap=await FirebaseFirestore.instance
+                .collection('level1')
+                .doc(widget.docId).get();
+    DocumentSnapshot readingSnap=await FirebaseFirestore.instance
+                .collection('level1')
+                .doc(widget.docId)
+                .collection('readings')
+                .doc(widget.readId).get(); 
+
+    sessionName= sessionSnap.data()['title'];
+    readingName= readingSnap.data()['title'];
   }
 
   String validateFields(String input) {

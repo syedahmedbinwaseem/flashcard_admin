@@ -17,6 +17,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class FlashCard extends StatefulWidget {
   @override
@@ -108,6 +109,7 @@ class _FlashCardState extends State<FlashCard>
 
   @override
   void initState() {
+    initializeDateFormatting();
     isLoading = false;
     super.initState();
     fToast = FToast();
@@ -116,6 +118,7 @@ class _FlashCardState extends State<FlashCard>
 
   @override
   Widget build(BuildContext context) {
+    var format = DateFormat('dd-MM-yyyy   HH:mm a');
     var padding = MediaQuery.of(context).padding;
     return WillPopScope(
       onWillPop: () {
@@ -177,7 +180,7 @@ class _FlashCardState extends State<FlashCard>
                     ),
               centerTitle: true,
               leading: IconButton(
-                  icon: Icon(Icons.home, color: Colors.black),
+                  icon: Icon(Icons.home, color: Colors.black.withOpacity(0.5)),
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                         context,
@@ -584,25 +587,47 @@ class _FlashCardState extends State<FlashCard>
                                                     });
                                                   },
                                                   // Reading data
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(5),
+                                                    child: Column(
                                                       children: [
-                                                        Text(
-                                                          formatter.format(
-                                                                  index + 1) +
-                                                              "\t\t\t\t" +
-                                                              snapshot.data
-                                                                          .docs[
-                                                                      index]
-                                                                  ['title'],
-                                                          style: TextStyle(
-                                                              color: textColor,
-                                                              fontSize: 15),
+                                                        Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Text(
+                                                            formatter.format(
+                                                                    index + 1) +
+                                                                "\t\t\t\t" +
+                                                                snapshot.data
+                                                                            .docs[
+                                                                        index]
+                                                                    ['title'],
+                                                            style: TextStyle(
+                                                                color:
+                                                                    textColor,
+                                                                fontSize: 15),
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Align(
+                                                          alignment: Alignment
+                                                              .bottomLeft,
+                                                          child: Text(
+                                                            "\t\t\t\t\t" +
+                                                                format.format((snapshot
+                                                                            .data
+                                                                            .docs[index]['created_at']
+                                                                        as Timestamp)
+                                                                    .toDate()),
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
@@ -1059,7 +1084,25 @@ class _FlashCardState extends State<FlashCard>
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          SizedBox(height: 50),
+                                                          Container(
+                                                            height: 50,
+                                                            child: Align(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: Text(
+                                                                  format.format((flashList[myIndex]
+                                                                              [
+                                                                              'created_at']
+                                                                          as Timestamp)
+                                                                      .toDate()),
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .grey,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w300),
+                                                                )),
+                                                          ),
                                                           Container(
                                                             height: 50,
                                                             child: Material(
@@ -1118,10 +1161,7 @@ class _FlashCardState extends State<FlashCard>
                                                                       width: 30,
                                                                     ),
                                                                     Text(
-                                                                      flashList[
-                                                                              myIndex]
-                                                                          [
-                                                                          'title'],
+                                                                      flashList[myIndex]['title'],
                                                                       style: TextStyle(
                                                                           fontWeight: FontWeight
                                                                               .bold,
@@ -1170,34 +1210,32 @@ class _FlashCardState extends State<FlashCard>
                                                                     bottom: 10,
                                                                     top: 10),
                                                             width: widthh,
-                                                            height: (flashList[myIndex]
-                                                                            .data()
-                                                                            .containsKey(
-                                                                                'img_link') &&
-                                                                        flashList[myIndex]['img_link']
-                                                                            .toString()
-                                                                            .isNotEmpty) &&
-                                                                    flashList[myIndex]
-                                                                            [
-                                                                            'img_link'] !=
-                                                                        null
-                                                                ? 200
-                                                                : 70,
+                                                            // height: (flashList[myIndex]
+                                                            //                 .data()
+                                                            //                 .containsKey(
+                                                            //                     'img_link') &&
+                                                            //             flashList[myIndex]['img_link']
+                                                            //                 .toString()
+                                                            //                 .isNotEmpty) &&
+                                                            //         flashList[myIndex]
+                                                            //                 [
+                                                            //                 'img_link'] !=
+                                                            //             null
+                                                            //     ? 300
+                                                            //     : 150,
                                                             duration: Duration(
                                                                 microseconds:
                                                                     1000),
                                                             child: Column(
                                                               children: [
-                                                                Text(
-                                                                  flashList[
-                                                                          myIndex]
-                                                                      ['body'],
+                                                                expand?Text(
+                                                                  flashList[myIndex]['body'],
                                                                   style: TextStyle(
                                                                       color:
                                                                           textColor,
                                                                       fontSize:
                                                                           15),
-                                                                ),
+                                                                ):Container(),
                                                                 SizedBox(
                                                                     height: 10),
                                                                 (flashList[myIndex].data().containsKey('img_link') &&
@@ -1306,7 +1344,7 @@ class _FlashCardState extends State<FlashCard>
                             ),
                           )
 
-                        ///*********************************** Enlisting Readings ********************  */
+                        ///*********************************** Enlisting Sessions ********************  */
                         : StreamBuilder(
                             stream: FirebaseFirestore.instance
                                 .collection('level1')
@@ -1440,28 +1478,61 @@ class _FlashCardState extends State<FlashCard>
                                                                       ['title'];
                                                             });
                                                           },
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .centerLeft,
-                                                            child: Text(
-                                                              formatter.format(
-                                                                      index +
-                                                                          1) +
-                                                                  "\t\t\t\t\t" +
-                                                                  snapshot.data
-                                                                              .docs[
-                                                                          index]
-                                                                      ['title'],
-                                                              style: TextStyle(
-                                                                fontSize: 15,
-                                                                color:
-                                                                    textColor,
-                                                              ),
+                                                          child: Container(
+                                                            // height: 60,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            child: Column(
+                                                              children: [
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .centerLeft,
+                                                                  child: Text(
+                                                                    formatter.format(index +
+                                                                            1) +
+                                                                        "\t\t\t\t\t" +
+                                                                        snapshot
+                                                                            .data
+                                                                            .docs[index]['title'],
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          15,
+                                                                      color:
+                                                                          textColor,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    height: 10),
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .bottomLeft,
+                                                                  child: Text(
+                                                                    "\t\t\t\t\t" +
+                                                                        format.format((snapshot.data.docs[index]['created_at']
+                                                                                as Timestamp)
+                                                                            .toDate()),
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w300,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                         ),
-                                                        secondaryActions: <
-                                                            Widget>[
+                                                        secondaryActions: <Widget>[
                                                           ClipRRect(
                                                             borderRadius: BorderRadius.only(
                                                                 topLeft: Radius

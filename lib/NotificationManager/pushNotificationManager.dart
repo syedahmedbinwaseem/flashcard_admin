@@ -26,24 +26,28 @@ Future<Map<String, dynamic>> sendAndRetrieveMessage(String fcmTok, String title,
        },
        'priority': 'high',
        'data': <String, dynamic>{
+         'title' : '$title',
+         'body' : '$body',
          'click_action': 'FLUTTER_NOTIFICATION_CLICK',
          'id': '1',
          'status': 'done'
        },
-       'to': fcmTok,
+       'to': '/topics/TopicToListen',
      },
     ),
   );
 
-    final Completer<Map<String, dynamic>> completer =
-      Completer<Map<String, dynamic>>();
+  final Completer<Map<String, dynamic>> completer =
+     Completer<Map<String, dynamic>>();
 
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        completer.complete(message);
-      },
-    );
+  // firebaseMessaging.configure(
+  //   onMessage: (Map<String, dynamic> message) async {
+  //     completer.complete(message);
+  //   },
+  // );
 
-    return completer.future;
+  return completer.future;
   }
 }
+
+

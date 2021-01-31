@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flashcard_admin/NotificationManager/pushNotificationManager.dart';
 import 'package:flashcard_admin/screens/quizDetails.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
@@ -777,6 +778,12 @@ class _FlashQuizState extends State<FlashQuiz> {
                                       .collection('quizzes')
                                       .doc(docId)
                                       .update({'published': true});
+
+                                  NotificationManager notificationManager=new NotificationManager();
+                                  notificationManager.sendAndRetrieveMessage('', 
+                                  "New Quiz PUblished!",
+                                  "CFA Nodal Trainer published new Flashcard for you.");
+                                
                                   fToast.showToast(
                                     child: ToastWidget.toast(
                                         'Published successfully',

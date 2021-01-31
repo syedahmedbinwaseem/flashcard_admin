@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-Color backgroundColor1 = Color(0xff1F3A67);
-Color backgroundColor2 = Color(0xff026BBF);
+Color backgroundColor1 = Color(0xff1F3A67).withOpacity(0.7);
+Color backgroundColor2 = Color(0xff026BBF).withOpacity(0.7);
 
-Color buttonColor1 = Color(0xffF1CEC1);
-Color buttonColor2 = Color(0xffC8BF06);
+Color buttonColor1 = Color(0xffF1CEC1).withOpacity(0.7);
+Color buttonColor2 = Color(0xffC8BF06).withOpacity(0.7);
 
 Color textColor = Color(0xff111111);
 Color buttonTextColor = Color(0xffFDFEFF);
