@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+// ignore: must_be_immutable
 class EditFC extends StatefulWidget {
   String sessionId;
   String readId;

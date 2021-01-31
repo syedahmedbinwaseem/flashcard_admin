@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:flashcard_admin/screens/questionDetails.dart';
+import 'package:flashcard_admin/Flash%20Quiz/questionDetails.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flutter/material.dart';

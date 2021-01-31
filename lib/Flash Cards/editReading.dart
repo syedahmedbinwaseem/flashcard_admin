@@ -3,6 +3,7 @@ import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+// ignore: must_be_immutable
 class EditReading extends StatefulWidget {
   String sessionId;
   String readId;

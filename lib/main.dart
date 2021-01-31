@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flashcard_admin/screens/splashScreen.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flutter/material.dart';
