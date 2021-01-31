@@ -33,7 +33,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
   bool isLoading;
   String sessionName;
   String readingName;
-  
+
   @override
   void initState() {
     _getSessionReading();
@@ -251,7 +251,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                         setState(() {
                                           isLoading = true;
                                         });
-                                         
+
                                         await uploadFile().then((value) async {
                                           try {
                                             DocumentReference doc =
@@ -284,14 +284,18 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                             );
                                           }
                                         });
-                                        
-                                        NotificationManager notificationManager=new NotificationManager();
-                                        notificationManager.sendAndRetrieveMessage('', 
-                                        "New Flashcard added",
-                                        "CFA Nodal Trainer added new Flashcard in Session \'$sessionName\' under Reading \'$readingName\'.");
-                                      
+
+                                        NotificationManager
+                                            notificationManager =
+                                            new NotificationManager();
+                                        notificationManager.sendAndRetrieveMessage(
+                                            '',
+                                            "New Flashcard added",
+                                            "CFA Nodal Trainer added new Flashcard in Session \'$sessionName\' under Reading \'$readingName\'.");
+
                                         Fluttertoast.showToast(
-                                          msg: "Successfully Added new FlashCard!",
+                                          msg:
+                                              "Successfully Added new FlashCard!",
                                           toastLength: Toast.LENGTH_LONG,
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 3,
@@ -324,18 +328,20 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
     );
   }
 
-  _getSessionReading()async{
-    DocumentSnapshot sessionSnap=await FirebaseFirestore.instance
-                .collection('level1')
-                .doc(widget.docId).get();
-    DocumentSnapshot readingSnap=await FirebaseFirestore.instance
-                .collection('level1')
-                .doc(widget.docId)
-                .collection('readings')
-                .doc(widget.readId).get(); 
+  _getSessionReading() async {
+    DocumentSnapshot sessionSnap = await FirebaseFirestore.instance
+        .collection('level1')
+        .doc(widget.docId)
+        .get();
+    DocumentSnapshot readingSnap = await FirebaseFirestore.instance
+        .collection('level1')
+        .doc(widget.docId)
+        .collection('readings')
+        .doc(widget.readId)
+        .get();
 
-    sessionName= sessionSnap.data()['title'];
-    readingName= readingSnap.data()['title'];
+    sessionName = sessionSnap.data()['title'];
+    readingName = readingSnap.data()['title'];
   }
 
   String validateFields(String input) {

@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_time_picker/date_time_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flashcard_admin/NotificationManager/pushNotificationManager.dart';
+import 'package:flashcard_admin/Exam%20Tips/addTip.dart';
+import 'package:flashcard_admin/Exam%20Tips/deteleTip.dart';
+import 'package:flashcard_admin/Exam%20Tips/editExamTip.dart';
 import 'package:flashcard_admin/screens/tipsPage.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:date_format/date_format.dart';
-import 'package:flashcard_admin/utils/toast_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class ExamTips extends StatefulWidget {
   @override
@@ -19,7 +17,6 @@ class ExamTips extends StatefulWidget {
 }
 
 class _ExamTipsState extends State<ExamTips> {
-  List<DocumentSnapshot> snap1 = List<DocumentSnapshot>();
   String date;
   final idCon = TextEditingController();
   final remCon = TextEditingController();
@@ -33,32 +30,6 @@ class _ExamTipsState extends State<ExamTips> {
   bool isEdit;
   FToast fToast;
   bool load = false;
-
-  void setTimer() {
-    Future.delayed(Duration(seconds: 3), () {
-      setState(() {
-        load = true;
-      });
-    });
-  }
-
-  void getTips() async {
-    setState(() {
-      snap1 = [];
-    });
-    QuerySnapshot snap =
-        await FirebaseFirestore.instance.collection('examtips').get();
-    snap.docs.forEach((element) {
-      setState(() {
-        snap1.add(element);
-      });
-    });
-  }
-
-  DateTime getTime(int index) {
-    Timestamp t = snap1[index]['time'];
-    return t.toDate();
-  }
 
   DateTime convertDateFromString(String strDate) {
     DateTime todayDate = DateTime.parse(strDate);
@@ -75,8 +46,7 @@ class _ExamTipsState extends State<ExamTips> {
   @override
   void initState() {
     isLoading = false;
-    setTimer();
-    getTips();
+
     super.initState();
     fToast = FToast();
     fToast.init(context);
@@ -90,251 +60,7 @@ class _ExamTipsState extends State<ExamTips> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: blueTextColor,
           heroTag: 'newtip',
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return StatefulBuilder(builder: (context, setState) {
-                    return ModalProgressHUD(
-                      inAsyncCall: isLoading,
-                      child: Dialog(
-                        insetPadding: EdgeInsets.all(0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: GestureDetector(
-                          onTap: () {
-                            FocusScope.of(context).unfocus();
-                          },
-                          child: SingleChildScrollView(
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: GlobalWidget.backGround(),
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Add new tip',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  SizedBox(height: 10),
-                                  SizedBox(
-                                    height: 0,
-                                  ),
-                                  Theme(
-                                    data: new ThemeData(
-                                      primaryColor: Colors.grey[700],
-                                    ),
-                                    child: TextField(
-                                      style: TextStyle(fontFamily: 'Segoe'),
-                                      controller: tipCon,
-                                      textInputAction: TextInputAction.next,
-                                      cursorColor: Colors.grey[700],
-                                      decoration: InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: 'Tip',
-                                          hintStyle: TextStyle(
-                                              fontFamily: 'Segoe',
-                                              fontSize: 12)),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 0,
-                                  ),
-                                  Theme(
-                                    data: new ThemeData(
-                                      primaryColor: Colors.grey[700],
-                                    ),
-                                    child: TextField(
-                                      style: TextStyle(fontFamily: 'Segoe'),
-                                      controller: remCon,
-                                      maxLines: 3,
-                                      cursorColor: Colors.grey[700],
-                                      decoration: InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: 'Remember',
-                                          hintStyle: TextStyle(
-                                              fontFamily: 'Segoe',
-                                              fontSize: 12)),
-                                    ),
-                                  ),
-                                  DateTimePicker(
-                                    decoration: InputDecoration(
-                                        focusColor: Colors.black,
-                                        hintText: 'Date',
-                                        hintStyle: TextStyle(
-                                            fontFamily: 'Segoe', fontSize: 12),
-                                        enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black)),
-                                        border: UnderlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.black),
-                                        ),
-                                        disabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black)),
-                                        focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black))),
-                                    style: TextStyle(
-                                        fontFamily: 'Segoe', fontSize: 12),
-                                    initialValue: '',
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime(2100),
-                                    dateLabelText: 'Date',
-                                    onChanged: (val) => setState(() {
-                                      date = val;
-                                    }),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(right: 10),
-                                    height: 40,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            remCon.clear();
-                                            tipCon.clear();
-                                            idCon.clear();
-                                          },
-                                          child: Text(
-                                            'Cancel',
-                                            style: TextStyle(
-                                              fontFamily: 'Segoe',
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            setState(() {
-                                              isLoading = true;
-                                            });
-                                            if (tipCon.text == '') {
-                                              fToast.showToast(
-                                                child: ToastWidget.toast(
-                                                    'Tip cannot be empty',
-                                                    Icon(Icons.error,
-                                                        size: 20)),
-                                                toastDuration:
-                                                    Duration(seconds: 2),
-                                                gravity: ToastGravity.BOTTOM,
-                                              );
-                                              setState(() {
-                                                isLoading = false;
-                                              });
-                                            } else if (remCon.text == '') {
-                                              fToast.showToast(
-                                                child: ToastWidget.toast(
-                                                    'Remember cannot be empty',
-                                                    Icon(Icons.error,
-                                                        size: 20)),
-                                                toastDuration:
-                                                    Duration(seconds: 2),
-                                                gravity: ToastGravity.BOTTOM,
-                                              );
-                                              setState(() {
-                                                isLoading = false;
-                                              });
-                                            } else if (date == null ||
-                                                date == '') {
-                                              fToast.showToast(
-                                                child: ToastWidget.toast(
-                                                    'Date cannot be empty',
-                                                    Icon(Icons.error,
-                                                        size: 20)),
-                                                toastDuration:
-                                                    Duration(seconds: 2),
-                                                gravity: ToastGravity.BOTTOM,
-                                              );
-                                              setState(() {
-                                                isLoading = false;
-                                              });
-                                            } else {
-                                              User user = FirebaseAuth
-                                                  .instance.currentUser;
-                                              if (user != null) {
-                                                try {
-                                                  FirebaseFirestore.instance
-                                                      .collection('examtips')
-                                                      .doc()
-                                                      .set({
-                                                    'created_at':
-                                                        Timestamp.now(),
-                                                    'tip': tipCon.text,
-                                                    'remember': remCon.text,
-                                                    'time': Timestamp.fromDate(
-                                                        convertDateFromString(
-                                                            date))
-                                                  });
-                                                  NotificationManager notificationManager=new NotificationManager();
-                                                  notificationManager.sendAndRetrieveMessage('', 
-                                                  "Tip of Day!",
-                                                  "CFA Nodal Trainer added new tip of day for you.");
-                                                
-                                                  setState(() {
-                                                    isLoading = false;
-                                                  });
-                                                  Navigator.pop(context);
-                                                  fToast.showToast(
-                                                      child: ToastWidget.toast(
-                                                          'Tip added successfully',
-                                                          Icon(Icons.done)));
-                                                  getTips();
-                                                } catch (e) {}
-                                              } else {
-                                                fToast.showToast(
-                                                    child: ToastWidget.toast(
-                                                        'Tip with this ID already exist',
-                                                        Icon(Icons.error)));
-                                                setState(() {
-                                                  isLoading = false;
-                                                });
-                                              }
-                                            }
-                                          },
-                                          child: Text(
-                                            'Add',
-                                            style: TextStyle(
-                                                fontFamily: 'Segoe',
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.green),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  });
-                }).then((value) {
-              idCon.clear();
-              remCon.clear();
-              tipCon.clear();
-            });
-          },
+          onPressed: addTip,
           child: Center(
             child: Icon(Icons.add),
           ),
@@ -363,973 +89,194 @@ class _ExamTipsState extends State<ExamTips> {
           ),
           backgroundColor: Colors.white,
         ),
-        body: snap1.length == 0 && load == false
-            ? Center(
-                child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(blueTextColor),
-              ))
-            : snap1.length == 0 && load == true
-                ? Center(
-                    child: Text('No tips available.'),
-                  )
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('examtips')
+              .orderBy('time', descending: true)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            return snapshot.data == null
+                ? Container(
+                    decoration: GlobalWidget.backGround(),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(blueTextColor),
+                      ),
+                    ))
                 : ListView.builder(
                     padding: EdgeInsets.only(bottom: 20, top: 10),
-                    itemCount: snap1.length,
+                    itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onLongPress: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    backgroundColor: buttonColor1,
-                                    title: Text(
-                                      'Tip # ',
-                                      style: TextStyle(
-                                          fontFamily: 'Segoe',
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    content: Text(
-                                      "Select an option",
-                                      style: TextStyle(
-                                        fontFamily: 'Segoe',
-                                      ),
-                                    ),
-                                    actionsPadding:
-                                        EdgeInsets.only(bottom: 10, right: 10),
-                                    actions: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                          setState(() {
-                                            tipECon.text = snap1[index]['tip'];
-                                            remECon.text =
-                                                snap1[index]['remember'];
-                                          });
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return StatefulBuilder(builder:
-                                                    (context, setState) {
-                                                  return ModalProgressHUD(
-                                                    inAsyncCall: isLoading,
-                                                    child: Dialog(
-                                                      insetPadding:
-                                                          EdgeInsets.all(0),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10)),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          FocusScope.of(context)
-                                                              .unfocus();
-                                                        },
-                                                        child:
-                                                            SingleChildScrollView(
-                                                          child: Container(
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.9,
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    10),
-                                                            decoration:
-                                                                GlobalWidget
-                                                                    .backGround(),
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      'Edit tip',
-                                                                      style: TextStyle(
-                                                                          fontFamily:
-                                                                              'Segoe',
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontSize:
-                                                                              20),
-                                                                    ),
-                                                                    Expanded(
-                                                                      child:
-                                                                          Align(
-                                                                        alignment:
-                                                                            Alignment.centerRight,
-                                                                        child:
-                                                                            Text(
-                                                                          'ID: ',
-                                                                          style: TextStyle(
-                                                                              fontFamily: 'Segoe',
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: 20),
-                                                                        ),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                    height: 10),
-                                                                Theme(
-                                                                  data:
-                                                                      new ThemeData(
-                                                                    primaryColor:
-                                                                        Colors.grey[
-                                                                            700],
-                                                                  ),
-                                                                  child: TextField(
-                                                                      style: TextStyle(fontFamily: 'Segoe'),
-                                                                      controller: tipECon,
-                                                                      textInputAction: TextInputAction.next,
-                                                                      cursorColor: Colors.grey[700],
-                                                                      decoration: InputDecoration(
-                                                                        enabledBorder:
-                                                                            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                                                        labelText:
-                                                                            'Tip',
-                                                                        labelStyle: TextStyle(
-                                                                            color: Colors
-                                                                                .black,
-                                                                            fontFamily:
-                                                                                'Segoe',
-                                                                            fontSize:
-                                                                                12),
-                                                                        // hintText:
-                                                                        //     'Tip',
-                                                                        // hintStyle: TextStyle(
-                                                                        //     fontFamily: 'Segoe',
-                                                                        //     fontSize: 12),
-                                                                      )),
-                                                                ),
-                                                                Theme(
-                                                                  data:
-                                                                      new ThemeData(
-                                                                    primaryColor:
-                                                                        Colors.grey[
-                                                                            700],
-                                                                  ),
-                                                                  child: TextField(
-                                                                      style: TextStyle(fontFamily: 'Segoe'),
-                                                                      controller: remECon,
-                                                                      textInputAction: TextInputAction.next,
-                                                                      cursorColor: Colors.grey[700],
-                                                                      decoration: InputDecoration(
-                                                                        enabledBorder:
-                                                                            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                                                        labelText:
-                                                                            'Remember',
-                                                                        labelStyle: TextStyle(
-                                                                            fontFamily:
-                                                                                'Segoe',
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontSize: 12),
-                                                                      )
-                                                                      // hintText:
-                                                                      //     'Remember',
-                                                                      // hintStyle: TextStyle(
-                                                                      //     fontFamily:
-                                                                      //         'Segoe',
-                                                                      //     fontSize:
-                                                                      //         12)),
-                                                                      ),
-                                                                ),
-                                                                DateTimePicker(
-                                                                  decoration: InputDecoration(
-                                                                      focusColor: Colors.black,
-                                                                      labelText: 'Date',
-                                                                      labelStyle: TextStyle(color: Colors.black, fontFamily: 'Segoe', fontSize: 12),
-                                                                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                                                      border: UnderlineInputBorder(
-                                                                        borderSide:
-                                                                            BorderSide(color: Colors.black),
-                                                                      ),
-                                                                      disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                                                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black))),
-                                                                  cursorColor:
-                                                                      Colors
-                                                                          .black,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontFamily:
-                                                                          'Segoe',
-                                                                      fontSize:
-                                                                          12),
-                                                                  initialValue:
-                                                                      convertStringFromDate(
-                                                                          snap1[index]
-                                                                              [
-                                                                              'time']),
-                                                                  firstDate:
-                                                                      DateTime(
-                                                                          2000),
-                                                                  lastDate:
-                                                                      DateTime(
-                                                                          2100),
-                                                                  dateLabelText:
-                                                                      'Date',
-                                                                  onChanged: (val) =>
-                                                                      setState(
-                                                                          () {
-                                                                    date = val;
-                                                                  }),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                Container(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          right:
-                                                                              10),
-                                                                  height: 40,
-                                                                  width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.9,
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .end,
-                                                                    children: [
-                                                                      GestureDetector(
-                                                                        onTap:
-                                                                            () {
-                                                                          tipECon
-                                                                              .clear();
-                                                                          remECon
-                                                                              .clear();
-
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                        child: Text(
-                                                                            'Cancel',
-                                                                            style:
-                                                                                TextStyle(fontFamily: "Segoe", fontWeight: FontWeight.bold)),
-                                                                      ),
-                                                                      SizedBox(
-                                                                          width:
-                                                                              20),
-                                                                      GestureDetector(
-                                                                        onTap:
-                                                                            () async {
-                                                                          setState(
-                                                                              () {
-                                                                            isLoading =
-                                                                                true;
-                                                                          });
-                                                                          if (tipECon.text ==
-                                                                              '') {
-                                                                            fToast.showToast(child: ToastWidget.toast('Tip cannot be empty', Icon(Icons.error)));
-                                                                            setState(() {
-                                                                              isLoading = false;
-                                                                            });
-                                                                          } else if (remECon.text ==
-                                                                              '') {
-                                                                            fToast.showToast(child: ToastWidget.toast('Remember cannot be empty', Icon(Icons.error)));
-                                                                            setState(() {
-                                                                              isLoading = false;
-                                                                            });
-                                                                          } else if (date ==
-                                                                              '') {
-                                                                            fToast.showToast(child: ToastWidget.toast('Date cannot be empty', Icon(Icons.error)));
-                                                                            setState(() {
-                                                                              isLoading = false;
-                                                                            });
-                                                                          } else {
-                                                                            try {
-                                                                              FirebaseFirestore.instance.collection('examtips').doc(snap1[index].id).update({
-                                                                                'tip': tipECon.text,
-                                                                                'remember': remECon.text,
-                                                                                'time': convertDateFromString(date)
-                                                                              });
-                                                                              Navigator.pop(context);
-                                                                              getTips();
-                                                                              setState(() {
-                                                                                isLoading = false;
-                                                                              });
-                                                                              fToast.showToast(child: ToastWidget.toast('Tip updated', Icon(Icons.done)));
-                                                                            } catch (e) {
-                                                                              setState(() {
-                                                                                isLoading = false;
-                                                                              });
-                                                                            }
-                                                                          }
-                                                                        },
-                                                                        child: Text(
-                                                                            'Edit',
-                                                                            style: TextStyle(
-                                                                                fontFamily: "Segoe",
-                                                                                fontWeight: FontWeight.bold,
-                                                                                color: blueTextColor)),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                });
-                                              });
-                                        },
-                                        child: Text('Edit',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: blueTextColor)),
-                                      ),
-                                      SizedBox(width: 10),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                    'Are you sure?',
-                                                    style: TextStyle(
-                                                        fontFamily: 'Segoe',
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  content: isLoading == true
-                                                      ? Container(
-                                                          height: 40,
-                                                          width: 40,
-                                                          child: Center(
-                                                            child: SizedBox(
-                                                                height: 35,
-                                                                width: 35,
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  valueColor:
-                                                                      AlwaysStoppedAnimation<
-                                                                          Color>(
-                                                                    Color
-                                                                        .fromRGBO(
-                                                                            102,
-                                                                            126,
-                                                                            234,
-                                                                            1),
-                                                                  ),
-                                                                  strokeWidth:
-                                                                      3,
-                                                                )),
-                                                          ),
-                                                        )
-                                                      : null,
-                                                  actionsPadding:
-                                                      EdgeInsets.only(
-                                                          bottom: 10,
-                                                          right: 10),
-                                                  actions: [
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text(
-                                                        'No',
-                                                        style: TextStyle(
-                                                          fontFamily: 'Segoe',
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        setState(() {
-                                                          isLoading = true;
-                                                        });
-                                                        try {
-                                                          await FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'examtips')
-                                                              .doc(snap1[index]
-                                                                  .id)
-                                                              .delete();
-                                                          fToast.showToast(
-                                                              child: ToastWidget.toast(
-                                                                  'Tip Deleted',
-                                                                  Icon(Icons
-                                                                      .done)));
-
-                                                          Navigator.pop(
-                                                              context);
-                                                          initState();
-                                                          setState(() {
-                                                            isLoading = false;
-                                                          });
-                                                        } catch (e) {
-                                                          setState(() {
-                                                            isLoading = false;
-                                                          });
-                                                          print(e);
-                                                          // fToast.showToast(
-                                                          //     child: ToastWidget.toast(
-                                                          //         'Unexpected error occured',
-                                                          //         Icon(Icons
-                                                          //             .error)));
-                                                        }
-                                                      },
-                                                      child: Text(
-                                                        'Yes',
-                                                        style: TextStyle(
-                                                            fontFamily: 'Segoe',
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.red),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              });
-                                        },
-                                        child: Text(
-                                          'Delete',
-                                          style: TextStyle(
-                                              fontFamily: 'Segoe',
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.red),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                });
-                          
-                          },
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TipsPage(
-                                  allTips: snap1,
-                                  myIndex: index,
-                                ),
+                      return Slidable(
+                        actionPane: SlidableDrawerActionPane(),
+                        secondaryActions: <Widget>[
+                          Container(
+                            height: 80,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10)),
+                              child: IconSlideAction(
+                                caption: 'Edit',
+                                color: Colors.black45,
+                                icon: Icons.edit,
+                                onTap: () {
+                                  editTip(
+                                      snapshot.data.docs[index].id,
+                                      index,
+                                      context,
+                                      convertStringFromDate(
+                                          snapshot.data.docs[index]['time']),
+                                      snapshot.data.docs[index]['tip'],
+                                      snapshot.data.docs[index]['remember']);
+                                },
                               ),
-                            );
-                          },
-                          child: Slidable(
-                            actionPane: SlidableDrawerActionPane(),
-                            secondaryActions: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius
-                                        .circular(
-                                            10),
-                                    bottomLeft: Radius
-                                        .circular(
-                                            10)),
-                                child:
-                                    IconSlideAction(
-                                  caption: 'Edit',
-                                  color: Colors
-                                      .black45,
-                                  icon: Icons.edit,
-                                  onTap: () {
-                                    setState(() {
-                                      tipECon.text = snap1[index]['tip'];
-                                      remECon.text =
-                                          snap1[index]['remember'];
-                                    });
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return StatefulBuilder(builder:
-                                            (context, setState) {
-                                          return ModalProgressHUD(
-                                            inAsyncCall: isLoading,
-                                            child: Dialog(
-                                              insetPadding:
-                                                  EdgeInsets.all(0),
-                                              shape:
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius
-                                                              .circular(
-                                                                  10)),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  FocusScope.of(context)
-                                                      .unfocus();
-                                                },
-                                                child:
-                                                    SingleChildScrollView(
-                                                  child: Container(
-                                                    width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width *
-                                                        0.9,
-                                                    padding:
-                                                        EdgeInsets.all(
-                                                            10),
-                                                    decoration:
-                                                        GlobalWidget
-                                                            .backGround(),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize
-                                                              .min,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              'Edit tip',
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      'Segoe',
-                                                                  fontWeight: FontWeight
-                                                                      .bold,
-                                                                  fontSize:
-                                                                      20),
-                                                            ),
-                                                            Expanded(
-                                                              child:
-                                                                  Align(
-                                                                alignment:
-                                                                    Alignment.centerRight,
-                                                                child:
-                                                                    Text(
-                                                                  ' ',
-                                                                  style: TextStyle(
-                                                                      fontFamily: 'Segoe',
-                                                                      fontWeight: FontWeight.bold,
-                                                                      fontSize: 20),
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                            height: 10),
-                                                        Theme(
-                                                          data:
-                                                              new ThemeData(
-                                                            primaryColor:
-                                                                Colors.grey[
-                                                                    700],
-                                                          ),
-                                                          child: TextField(
-                                                              style: TextStyle(fontFamily: 'Segoe'),
-                                                              controller: tipECon,
-                                                              textInputAction: TextInputAction.next,
-                                                              cursorColor: Colors.grey[700],
-                                                              decoration: InputDecoration(
-                                                                enabledBorder:
-                                                                    UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                                                labelText:
-                                                                    'Tip',
-                                                                labelStyle: TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontFamily:
-                                                                        'Segoe',
-                                                                    fontSize:
-                                                                        12),
-                                                                // hintText:
-                                                                //     'Tip',
-                                                                // hintStyle: TextStyle(
-                                                                //     fontFamily: 'Segoe',
-                                                                //     fontSize: 12),
-                                                              )),
-                                                        ),
-                                                        Theme(
-                                                          data:
-                                                              new ThemeData(
-                                                            primaryColor:
-                                                                Colors.grey[
-                                                                    700],
-                                                          ),
-                                                          child: TextField(
-                                                              style: TextStyle(fontFamily: 'Segoe'),
-                                                              controller: remECon,
-                                                              maxLines: 4,
-                                                              cursorColor: Colors.grey[700],
-                                                              decoration: InputDecoration(
-                                                                enabledBorder:
-                                                                    UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                                                labelText:
-                                                                    'Remember',
-                                                                labelStyle: TextStyle(
-                                                                    fontFamily:
-                                                                        'Segoe',
-                                                                    color:
-                                                                        Colors.black,
-                                                                    fontSize: 12),
-                                                              )
-                                                              // hintText:
-                                                              //     'Remember',
-                                                              // hintStyle: TextStyle(
-                                                              //     fontFamily:
-                                                              //         'Segoe',
-                                                              //     fontSize:
-                                                              //         12)),
-                                                              ),
-                                                        ),
-                                                        DateTimePicker(
-                                                          decoration: InputDecoration(
-                                                              focusColor: Colors.black,
-                                                              labelText: 'Date',
-                                                              labelStyle: TextStyle(color: Colors.black, fontFamily: 'Segoe', fontSize: 12),
-                                                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                                              border: UnderlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide(color: Colors.black),
-                                                              ),
-                                                              disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                                              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black))),
-                                                          cursorColor:
-                                                              Colors
-                                                                  .black,
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black,
-                                                              fontFamily:
-                                                                  'Segoe',
-                                                              fontSize:
-                                                                  12),
-                                                          initialValue:
-                                                              convertStringFromDate(
-                                                                  snap1[index]
-                                                                      [
-                                                                      'time']),
-                                                          firstDate:
-                                                              DateTime(
-                                                                  2000),
-                                                          lastDate:
-                                                              DateTime(
-                                                                  2100),
-                                                          dateLabelText:
-                                                              'Date',
-                                                          onChanged: (val) =>
-                                                              setState(
-                                                                  () {
-                                                            date = val;
-                                                          }),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Container(
-                                                          padding: EdgeInsets
-                                                              .only(
-                                                                  right:
-                                                                      10),
-                                                          height: 40,
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              GestureDetector(
-                                                                onTap:
-                                                                    () {
-                                                                  tipECon
-                                                                      .clear();
-                                                                  remECon
-                                                                      .clear();
-
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                                child: Text(
-                                                                    'Cancel',
-                                                                    style:
-                                                                        TextStyle(fontFamily: "Segoe", fontWeight: FontWeight.bold)),
-                                                              ),
-                                                              SizedBox(
-                                                                  width:
-                                                                      20),
-                                                              GestureDetector(
-                                                                onTap:
-                                                                    () async {
-                                                                  setState(
-                                                                      () {
-                                                                    isLoading =
-                                                                        true;
-                                                                  });
-                                                                  if (tipECon.text ==
-                                                                      '') {
-                                                                    fToast.showToast(child: ToastWidget.toast('Tip cannot be empty', Icon(Icons.error)));
-                                                                    setState(() {
-                                                                      isLoading = false;
-                                                                    });
-                                                                  } else if (remECon.text ==
-                                                                      '') {
-                                                                    fToast.showToast(child: ToastWidget.toast('Remember cannot be empty', Icon(Icons.error)));
-                                                                    setState(() {
-                                                                      isLoading = false;
-                                                                    });
-                                                                  } else if (date ==
-                                                                      '') {
-                                                                    fToast.showToast(child: ToastWidget.toast('Date cannot be empty', Icon(Icons.error)));
-                                                                    setState(() {
-                                                                      isLoading = false;
-                                                                    });
-                                                                  } else {
-                                                                    try {
-                                                                      FirebaseFirestore.instance.collection('examtips').doc(snap1[index].id).update({
-                                                                        'tip': tipECon.text,
-                                                                        'remember': remECon.text,
-                                                                        'time': convertDateFromString(date)
-                                                                      });
-                                                                      Navigator.pop(context);
-                                                                      getTips();
-                                                                      setState(() {
-                                                                        isLoading = false;
-                                                                      });
-                                                                      fToast.showToast(child: ToastWidget.toast('Tip updated', Icon(Icons.done)));
-                                                                    } catch (e) {
-                                                                      setState(() {
-                                                                        isLoading = false;
-                                                                      });
-                                                                    }
-                                                                  }
-                                                                },
-                                                                child: Text(
-                                                                    'Edit',
-                                                                    style: TextStyle(
-                                                                        fontFamily: "Segoe",
-                                                                        fontWeight: FontWeight.bold,
-                                                                        color: blueTextColor)),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                      });
-                                
-                                  },
-                                ),
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius
-                                        .circular(
-                                            10),
-                                    bottomRight: Radius
-                                        .circular(
-                                            10)),
-                                child:
-                                    IconSlideAction(
-                                  caption: 'Delete',
-                                  color: Colors.red,
-                                  icon:
-                                      Icons.delete,
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            'Are you sure?',
-                                            style: TextStyle(
-                                                fontFamily: 'Segoe',
-                                                fontWeight:
-                                                    FontWeight.bold),
-                                          ),
-                                          content: isLoading == true
-                                              ? Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Center(
-                                                    child: SizedBox(
-                                                        height: 35,
-                                                        width: 35,
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                          valueColor:
-                                                              AlwaysStoppedAnimation<
-                                                                  Color>(
-                                                            Color
-                                                                .fromRGBO(
-                                                                    102,
-                                                                    126,
-                                                                    234,
-                                                                    1),
-                                                          ),
-                                                          strokeWidth:
-                                                              3,
-                                                        )),
-                                                  ),
-                                                )
-                                              : null,
-                                          actionsPadding:
-                                              EdgeInsets.only(
-                                                  bottom: 10,
-                                                  right: 10),
-                                          actions: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  fontFamily: 'Segoe',
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            GestureDetector(
-                                              onTap: () async {
-                                                setState(() {
-                                                  isLoading = true;
-                                                });
-                                                try {
-                                                  await FirebaseFirestore
-                                                      .instance
-                                                      .collection(
-                                                          'examtips')
-                                                      .doc(snap1[index]
-                                                          .id)
-                                                      .delete();
-                                                  fToast.showToast(
-                                                      child: ToastWidget.toast(
-                                                          'Tip Deleted',
-                                                          Icon(Icons
-                                                              .done)));
-
-                                                  Navigator.pop(
-                                                      context);
-                                                  initState();
-                                                  setState(() {
-                                                    isLoading = false;
-                                                  });
-                                                } catch (e) {
-                                                  setState(() {
-                                                    isLoading = false;
-                                                  });
-                                                  print(e);
-                                                  // fToast.showToast(
-                                                  //     child: ToastWidget.toast(
-                                                  //         'Unexpected error occured',
-                                                  //         Icon(Icons
-                                                  //             .error)));
-                                                }
-                                              },
-                                              child: Text(
-                                                'Yes',
-                                                style: TextStyle(
-                                                    fontFamily: 'Segoe',
-                                                    fontWeight:
-                                                        FontWeight.bold,
-                                                    color: Colors.red),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      });
-                                  },
-                                ),
-                              ),
-                            ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
                             child: Container(
                               height: 80,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                color: buttonColor2,
-                                borderRadius: BorderRadius.circular(10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                child: IconSlideAction(
+                                  caption: 'Delete',
+                                  color: Colors.red,
+                                  icon: Icons.delete,
+                                  onTap: () {
+                                    deleteTip(snapshot.data.docs[index].id);
+                                  },
+                                ),
                               ),
-                              child: Row(
-                                children: [
-                                  SizedBox(width: 20),
-                                  CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    radius: 20,
-                                    child: Image.asset(
-                                        'assets/images/lightbulb.png'),
+                            ),
+                          ),
+                        ],
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TipsPage(
+                                    allTips: snapshot.data.docs,
+                                    myIndex: index,
                                   ),
-                                  SizedBox(width: 15),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Tip # ${index + 1}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          getTime(index)
-                                              .toString()
-                                              .substring(0, 10),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 13),
-                                        )
-                                      ],
+                                ),
+                              );
+                            },
+                            child: Slidable(
+                              actionPane: SlidableDrawerActionPane(),
+                              child: Container(
+                                height: 80,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: buttonColor2,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 20),
+                                    CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      radius: 20,
+                                      child: Image.asset(
+                                          'assets/images/lightbulb.png'),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(right: 20),
-                                        child: Icon(
-                                            Icons.arrow_forward_ios_outlined),
+                                    SizedBox(width: 15),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Tip # ${index + 1}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            snapshot.data.docs[index]['time']
+                                                    .toDate()
+                                                    .year
+                                                    .toString() +
+                                                '-' +
+                                                snapshot
+                                                    .data.docs[index]['time']
+                                                    .toDate()
+                                                    .month
+                                                    .toString() +
+                                                '-' +
+                                                snapshot
+                                                    .data.docs[index]['time']
+                                                    .toDate()
+                                                    .day
+                                                    .toString(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: 13),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  )
-                                ],
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 20),
+                                          child: Icon(
+                                              Icons.arrow_forward_ios_outlined),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
                       );
                     },
-                  ),
+                  );
+          },
+        ),
       ),
     );
+  }
+
+  addTip() {
+    showDialog(context: context, barrierDismissible: false, child: AddTip());
+  }
+
+  editTip(String docId, int index, BuildContext context, String previousDate,
+      String tip, String remember) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        child: EditTip(
+          datee: previousDate,
+          docId: docId,
+          previousDate: previousDate,
+          index: index,
+          tip: tip,
+          remember: remember,
+        ));
+  }
+
+  deleteTip(String docId) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        child: DeleteTip(
+          docId: docId,
+        ));
   }
 }
