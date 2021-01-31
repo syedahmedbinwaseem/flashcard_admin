@@ -129,6 +129,17 @@ class _QuizDetailsState extends State<QuizDetails> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         QuestionDetail(
+                                                          correctAnswer: snapshot
+                                                                  .data
+                                                                  .docs[index]
+                                                                  .data()
+                                                                  .containsKey(
+                                                                      'correct_answer')
+                                                              ? snapshot.data
+                                                                          .docs[
+                                                                      index][
+                                                                  'correct_answer']
+                                                              : null,
                                                           index: index + 1,
                                                           docId: widget.snap,
                                                           qId: snapshot.data
