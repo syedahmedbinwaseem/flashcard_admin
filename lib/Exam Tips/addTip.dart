@@ -35,7 +35,6 @@ class _AddTipState extends State<AddTip> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fToast = FToast();
     fToast.init(context);

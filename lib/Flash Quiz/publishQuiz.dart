@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+// ignore: must_be_immutable
 class PublishQuiz extends StatefulWidget {
   String docId;
 

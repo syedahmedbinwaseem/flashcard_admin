@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
+import 'package:flashcard_admin/utils/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 // ignore: must_be_immutable
@@ -12,7 +14,15 @@ class QuestionDetail extends StatefulWidget {
   String qId;
   String question;
   DocumentSnapshot snap;
-  QuestionDetail({this.index, this.docId, this.qId, this.question, this.snap});
+  String correctAnswer;
+
+  QuestionDetail(
+      {this.index,
+      this.docId,
+      this.qId,
+      this.question,
+      this.snap,
+      this.correctAnswer});
   @override
   _QuestionDetailState createState() => _QuestionDetailState();
 }
@@ -20,9 +30,23 @@ class QuestionDetail extends StatefulWidget {
 class _QuestionDetailState extends State<QuestionDetail> {
   DocumentSnapshot snap;
   bool isLoading = false;
+  String dropdownValue;
+  bool edit = false;
+  FToast fToast;
+
+  @override
+  void initState() {
+    setState(() {
+      dropdownValue = widget.correctAnswer;
+    });
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(snap);
+    print(dropdownValue);
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -213,54 +237,194 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                       radius: 18,
                                       child: !snapshot.data
                                               .data()
-                                              .containsKey('correct_answer')
-                                          ? IconButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  snap = snapshot.data;
-                                                });
-                                                addCorrectAnswer();
-                                              },
-                                              icon: Icon(
-                                                Icons.add,
-                                                size: 18,
-                                              ),
+                                              .containsKey('answer_options')
+                                          ? Icon(
+                                              Icons.add,
+                                              size: 18,
                                             )
-                                          : IconButton(
-                                              onPressed: () {
-                                                editCorrectAnswer(snapshot
-                                                    .data['correct_answer']);
-                                              },
-                                              icon: Icon(
-                                                Icons.edit,
-                                                size: 18,
-                                              ),
-                                            ),
+                                          : snapshot.data["answer_options"]
+                                                          .length ==
+                                                      1 &&
+                                                  !snapshot.data
+                                                      .data()
+                                                      .containsKey(
+                                                          'correct_answer')
+                                              ? IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      snap = snapshot.data;
+                                                    });
+                                                    dropdownValue == null
+                                                        ? fToast.showToast(
+                                                            child: ToastWidget.toast(
+                                                                'Please select an option',
+                                                                Icon(
+                                                                    Icons.error,
+                                                                    size: 20)),
+                                                            toastDuration:
+                                                                Duration(
+                                                                    seconds: 2),
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .BOTTOM,
+                                                          )
+                                                        : addCorrectAnswer(
+                                                            dropdownValue);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.done,
+                                                    size: 18,
+                                                  ),
+                                                )
+                                              : edit == true
+                                                  ? IconButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          snap = snapshot.data;
+                                                        });
+                                                        dropdownValue == null
+                                                            ? fToast.showToast(
+                                                                child: ToastWidget.toast(
+                                                                    'Please select an option',
+                                                                    Icon(
+                                                                        Icons
+                                                                            .error,
+                                                                        size:
+                                                                            20)),
+                                                                toastDuration:
+                                                                    Duration(
+                                                                        seconds:
+                                                                            2),
+                                                                gravity:
+                                                                    ToastGravity
+                                                                        .BOTTOM,
+                                                              )
+                                                            : addCorrectAnswer(
+                                                                dropdownValue);
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.done,
+                                                        size: 18,
+                                                      ),
+                                                    )
+                                                  : edit == false
+                                                      ? IconButton(
+                                                          onPressed: () {
+                                                            if (!snapshot.data
+                                                                    .data()
+                                                                    .containsKey(
+                                                                        'answer_options') ||
+                                                                snapshot
+                                                                        .data[
+                                                                            'answer_options']
+                                                                        .length ==
+                                                                    0) {
+                                                            } else {
+                                                              setState(() {
+                                                                edit = true;
+                                                              });
+                                                            }
+
+                                                            // editCorrectAnswer(snapshot
+                                                            //     .data['correct_answer']);
+                                                          },
+                                                          icon: Icon(
+                                                            Icons.edit,
+                                                            size: 18,
+                                                          ),
+                                                        )
+                                                      : null,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          !snapshot.data.data().containsKey('correct_answer')
-                              ? Container()
-                              : FlatButton(
-                                  onPressed: () {},
-                                  height: !snapshot.data
-                                          .data()
-                                          .containsKey('correct_answer')
-                                      ? 0
-                                      : 40,
-                                  padding: EdgeInsets.only(left: 8, right: 8),
-                                  highlightColor: buttonColor2.withOpacity(0.3),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
+                          !snapshot.data.data().containsKey('answer_options')
+                              ? Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    'Add an answer option to select correct answer',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                )
+                              : snapshot.data['answer_options'].length == 0
+                                  ? Container(
+                                      padding: EdgeInsets.all(8),
                                       child: Text(
-                                        snapshot.data['correct_answer'],
+                                        'Add an answer option to select correct answer',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w400),
-                                      )),
-                                ),
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                    )
+                                  : snapshot.data
+                                              .data()
+                                              .containsKey('correct_answer') &&
+                                          edit == false
+                                      ? FlatButton(
+                                          onPressed: () {},
+                                          height: !snapshot.data
+                                                  .data()
+                                                  .containsKey('correct_answer')
+                                              ? 0
+                                              : 40,
+                                          padding: EdgeInsets.only(
+                                              left: 8, right: 8),
+                                          highlightColor:
+                                              buttonColor2.withOpacity(0.3),
+                                          child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                snapshot.data['correct_answer'],
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              )),
+                                        )
+                                      : Container(
+                                          padding: EdgeInsets.only(
+                                              left: 8, right: 8),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: DropdownButtonHideUnderline(
+                                            child: new DropdownButton<String>(
+                                              hint: Text(
+                                                'Select an option',
+                                                style: TextStyle(
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+
+                                              // value: dropdownValue,
+                                              value: List.from(snapshot.data[
+                                                          'answer_options'])
+                                                      .contains(dropdownValue)
+                                                  ? dropdownValue
+                                                  : null,
+                                              icon: Icon(Icons.arrow_downward),
+                                              iconSize: 24,
+                                              elevation: 16,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                              onChanged: (String value) {
+                                                print(value);
+                                                setState(() {
+                                                  dropdownValue = value;
+                                                });
+                                              },
+                                              items: List.from(snapshot
+                                                      .data['answer_options'])
+                                                  .map<
+                                                      DropdownMenuItem<
+                                                          String>>((e) =>
+                                                      DropdownMenuItem<String>(
+                                                          value: e,
+                                                          child: Text(e)))
+                                                  .toList(),
+                                            ),
+                                          )),
+                          // :
                           Divider(height: 5),
                           SizedBox(height: 15),
                           Container(
@@ -696,7 +860,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
         });
   }
 
-  addCorrectAnswer() {
+  addCorrectAnswer(String option) {
     TextEditingController textController = new TextEditingController();
     GlobalKey<FormState> fKey = GlobalKey<FormState>();
     showDialog(
@@ -720,35 +884,39 @@ class _QuestionDetailState extends State<QuestionDetail> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Add Correct Answer',
+                          'Option selected:',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                        Theme(
-                          data: new ThemeData(
-                            primaryColor: Colors.grey[700],
-                          ),
-                          child: TextFormField(
-                            textCapitalization: TextCapitalization.sentences,
-                            keyboardType: TextInputType.text,
-                            style: TextStyle(fontFamily: 'Segoe'),
-                            controller: textController,
-                            validator: (input) {
-                              return input.isEmpty
-                                  ? 'Field is required!'
-                                  : null;
-                            },
-                            textInputAction: TextInputAction.done,
-                            cursorColor: Colors.grey[700],
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black)),
-                                hintText: 'Correct Answer',
-                                hintStyle: TextStyle(
-                                    fontFamily: 'Segoe', fontSize: 12)),
-                          ),
+                        SizedBox(
+                          height: 20,
                         ),
+                        Text(option),
+                        // Theme(
+                        //   data: new ThemeData(
+                        //     primaryColor: Colors.grey[700],
+                        //   ),
+                        //   child: TextFormField(
+                        //     textCapitalization: TextCapitalization.sentences,
+                        //     keyboardType: TextInputType.text,
+                        //     style: TextStyle(fontFamily: 'Segoe'),
+                        //     controller: textController,
+                        //     validator: (input) {
+                        //       return input.isEmpty
+                        //           ? 'Field is required!'
+                        //           : null;
+                        //     },
+                        //     textInputAction: TextInputAction.done,
+                        //     cursorColor: Colors.grey[700],
+                        //     decoration: InputDecoration(
+                        //         enabledBorder: UnderlineInputBorder(
+                        //             borderSide:
+                        //                 BorderSide(color: Colors.black)),
+                        //         hintText: 'Correct Answer',
+                        //         hintStyle: TextStyle(
+                        //             fontFamily: 'Segoe', fontSize: 12)),
+                        //   ),
+                        // ),
                         SizedBox(
                           height: 10,
                         ),
@@ -783,17 +951,16 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                         .doc(widget.docId)
                                         .collection('questions')
                                         .doc(snap.id)
-                                        .update({
-                                      'correct_answer': textController.text
-                                    });
+                                        .update({'correct_answer': option});
 
                                     setState(() {
                                       isLoading = false;
+                                      edit = false;
                                     });
                                   }
                                 },
                                 child: Text(
-                                  'Add',
+                                  'Save',
                                   style: TextStyle(
                                       fontFamily: 'Segoe',
                                       fontWeight: FontWeight.bold,

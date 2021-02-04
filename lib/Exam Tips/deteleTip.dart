@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+// ignore: must_be_immutable
 class DeleteTip extends StatefulWidget {
   String docId;
 
@@ -19,7 +20,6 @@ class _DeleteTipState extends State<DeleteTip> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fToast = FToast();
     fToast.init(context);
