@@ -96,6 +96,7 @@ class _AddTipState extends State<AddTip> {
                     child: TextField(
                       style: TextStyle(fontFamily: 'Segoe'),
                       controller: remCon,
+                      maxLines: 4,
                       cursorColor: Colors.grey[700],
                       decoration: InputDecoration(
                           enabledBorder: UnderlineInputBorder(

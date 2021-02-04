@@ -155,6 +155,7 @@ class _EditFCState extends State<EditFC> {
                           keyboardType: TextInputType.text,
                           style: TextStyle(fontFamily: 'Segoe'),
                           controller: bodyController,
+                          maxLines: 5,
                           validator: (input) {
                             return input.isEmpty
                                 ? 'Flashcard body is required!'

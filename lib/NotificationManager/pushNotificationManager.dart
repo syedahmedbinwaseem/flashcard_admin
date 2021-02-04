@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,7 +30,7 @@ Future<Map<String, dynamic>> sendAndRetrieveMessage(String fcmTok, String title,
          'title' : '$title',
          'body' : '$body',
          'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-         'id': '1',
+         'id': '${Timestamp.now().millisecondsSinceEpoch}',
          'status': 'done'
        },
        'to': '/topics/TopicToListen',

@@ -113,6 +113,7 @@ class _EditTipState extends State<EditTip> {
                     child: TextField(
                         style: TextStyle(fontFamily: 'Segoe'),
                         controller: remECon,
+                        maxLines: 4,
                         textInputAction: TextInputAction.next,
                         cursorColor: Colors.grey[700],
                         decoration: InputDecoration(
