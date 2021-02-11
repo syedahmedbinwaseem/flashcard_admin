@@ -63,7 +63,6 @@ class _DeleteFCState extends State<DeleteFC> {
                               setState(() {
                                 isLoading = true;
                               });
-                              Navigator.pop(context);
                               await FirebaseFirestore.instance
                                   .collection('level1')
                                   .doc(widget.sessionId)
@@ -72,6 +71,8 @@ class _DeleteFCState extends State<DeleteFC> {
                                   .collection('flashcards')
                                   .doc(widget.fcId)
                                   .delete();
+                              Navigator.pop(context);
+
                               setState(() {
                                 isLoading = false;
                               });

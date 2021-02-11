@@ -19,10 +19,24 @@ class AddReadingState extends State<AddReading>
   final readingName = TextEditingController();
   GlobalKey<FormState> fKey = GlobalKey<FormState>();
   bool isLoading;
+  int totalReadings;
+
+  void getTotalReadings() async {
+    QuerySnapshot snap = await FirebaseFirestore.instance
+        .collection('level1')
+        .doc(widget.docId)
+        .collection('readings')
+        .get();
+
+    setState(() {
+      totalReadings = snap.docs.length;
+    });
+  }
 
   @override
   void initState() {
     isLoading = false;
+    getTotalReadings();
     super.initState();
   }
 
@@ -117,7 +131,8 @@ class AddReadingState extends State<AddReading>
                                           await doc.set({
                                             'created_at': Timestamp.now(),
                                             'id': doc.id,
-                                            'title': readingName.text
+                                            'title': readingName.text,
+                                            'index': totalReadings + 1
                                           });
                                         } catch (e) {
                                           Fluttertoast.showToast(

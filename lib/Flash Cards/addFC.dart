@@ -27,16 +27,31 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
   FToast fToast;
   bool added = false;
   String imagePath;
-
   GlobalKey<FormState> fKey = GlobalKey<FormState>();
   bool isLoading;
   String sessionName;
   String readingName;
+  int totalFC;
+
+  void getTotalFC() async {
+    QuerySnapshot snap = await FirebaseFirestore.instance
+        .collection('level1')
+        .doc(widget.docId)
+        .collection('readings')
+        .doc(widget.readId)
+        .collection('flashcards')
+        .get();
+
+    setState(() {
+      totalFC = snap.docs.length;
+    });
+  }
 
   @override
   void initState() {
     _getSessionReading();
     isLoading = false;
+    getTotalFC();
     super.initState();
     fToast = FToast();
     fToast.init(context);
@@ -264,6 +279,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                             await doc.set({
                                               'created_at': Timestamp.now(),
                                               'id': doc.id,
+                                              'index': totalFC + 1,
                                               'title': fcName.text,
                                               'body': fcBody.text,
                                               'img_link': imagePath == null ||

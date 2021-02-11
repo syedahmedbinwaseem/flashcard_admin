@@ -81,7 +81,6 @@ class _AddQuizState extends State<AddQuiz> {
                           minWidth: 40,
                           onPressed: () async {
                             if (fKey.currentState.validate()) {
-                              Navigator.pop(context);
                               setState(() {
                                 isLoading = true;
                               });
@@ -94,6 +93,8 @@ class _AddQuizState extends State<AddQuiz> {
                                 'created_at': Timestamp.now(),
                                 'published': false
                               });
+                              Navigator.pop(context);
+
                               setState(() {
                                 isLoading = false;
                               });

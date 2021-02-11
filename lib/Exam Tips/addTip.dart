@@ -196,23 +196,18 @@ class _AddTipState extends State<AddTip> {
                                       .collection('examtips')
                                       .doc()
                                       .set({
+                                    'published': false,
                                     'created_at': Timestamp.now(),
                                     'tip': tipCon.text,
                                     'remember': remCon.text,
                                     'time': Timestamp.fromDate(
                                         convertDateFromString(date))
                                   });
-                                  NotificationManager notificationManager =
-                                      new NotificationManager();
-                                  notificationManager.sendAndRetrieveMessage(
-                                      '',
-                                      "Tip of Day!",
-                                      "CFA Nodal Trainer added new tip of day for you.");
+                                  Navigator.pop(context);
 
                                   setState(() {
                                     isLoading = false;
                                   });
-                                  Navigator.pop(context);
                                   fToast.showToast(
                                       child: ToastWidget.toast(
                                           'Tip added successfully',

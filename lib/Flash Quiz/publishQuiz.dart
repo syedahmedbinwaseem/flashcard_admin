@@ -166,8 +166,6 @@ class _PublishQuizState extends State<PublishQuiz> {
                                   isLoading = false;
                                 });
                               } else {
-                                Navigator.pop(context);
-
                                 await FirebaseFirestore.instance
                                     .collection('quizzes')
                                     .doc(widget.docId)
@@ -187,6 +185,8 @@ class _PublishQuizState extends State<PublishQuiz> {
                                   toastDuration: Duration(seconds: 3),
                                   gravity: ToastGravity.BOTTOM,
                                 );
+                                Navigator.pop(context);
+
                                 setState(() {
                                   isLoading = false;
                                 });

@@ -105,11 +105,12 @@ class _EditSessionState extends State<EditSession> {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    Navigator.pop(context);
                                     await FirebaseFirestore.instance
                                         .collection('level1')
                                         .doc(widget.sessionId)
                                         .update({'title': textController.text});
+                                    Navigator.pop(context);
+
                                     setState(() {
                                       isLoading = false;
                                     });

@@ -61,11 +61,12 @@ class _DeleteSessionState extends State<DeleteSession> {
                               setState(() {
                                 isLoading = true;
                               });
-                              Navigator.pop(context);
                               await FirebaseFirestore.instance
                                   .collection('level1')
                                   .doc(widget.sessionId)
                                   .delete();
+                              Navigator.pop(context);
+
                               setState(() {
                                 isLoading = false;
                               });

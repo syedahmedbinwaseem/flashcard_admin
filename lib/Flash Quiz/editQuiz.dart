@@ -32,100 +32,97 @@ class _EditQuizState extends State<EditQuiz> {
           insetPadding: EdgeInsets.all(0),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: ModalProgressHUD(
-            inAsyncCall: isLoading,
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: GlobalWidget.backGround(),
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Form(
-                  key: fKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Edit Title',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: GlobalWidget.backGround(),
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Form(
+                key: fKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Edit Title',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    Theme(
+                      data: new ThemeData(
+                        primaryColor: Colors.grey[700],
                       ),
-                      Theme(
-                        data: new ThemeData(
-                          primaryColor: Colors.grey[700],
-                        ),
-                        child: TextFormField(
-                          textCapitalization: TextCapitalization.sentences,
-                          keyboardType: TextInputType.text,
-                          style: TextStyle(fontFamily: 'Segoe'),
-                          controller: textController,
-                          validator: (input) {
-                            return input.isEmpty ? 'Field is required!' : null;
-                          },
-                          textInputAction: TextInputAction.done,
-                          cursorColor: Colors.grey[700],
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black)),
-                              hintText: 'Title',
-                              hintStyle:
-                                  TextStyle(fontFamily: 'Segoe', fontSize: 12)),
-                        ),
+                      child: TextFormField(
+                        textCapitalization: TextCapitalization.sentences,
+                        keyboardType: TextInputType.text,
+                        style: TextStyle(fontFamily: 'Segoe'),
+                        controller: textController,
+                        validator: (input) {
+                          return input.isEmpty ? 'Field is required!' : null;
+                        },
+                        textInputAction: TextInputAction.done,
+                        cursorColor: Colors.grey[700],
+                        decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                            hintText: 'Title',
+                            hintStyle:
+                                TextStyle(fontFamily: 'Segoe', fontSize: 12)),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            FlatButton(
-                              minWidth: 40,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(
-                                  fontFamily: 'Segoe',
-                                ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FlatButton(
+                            minWidth: 40,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontFamily: 'Segoe',
                               ),
                             ),
-                            FlatButton(
-                              minWidth: 40,
-                              onPressed: () async {
-                                if (fKey.currentState.validate()) {
-                                  Navigator.pop(context);
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  await FirebaseFirestore.instance
-                                      .collection('quizzes')
-                                      .doc(widget.docId)
-                                      .update({
-                                    'title': textController.text,
-                                  });
+                          ),
+                          FlatButton(
+                            minWidth: 40,
+                            onPressed: () async {
+                              if (fKey.currentState.validate()) {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                await FirebaseFirestore.instance
+                                    .collection('quizzes')
+                                    .doc(widget.docId)
+                                    .update({
+                                  'title': textController.text,
+                                });
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                }
-                              },
-                              child: Text(
-                                'Save',
-                                style: TextStyle(
-                                    fontFamily: 'Segoe',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: Text(
+                              'Save',
+                              style: TextStyle(
+                                  fontFamily: 'Segoe',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),

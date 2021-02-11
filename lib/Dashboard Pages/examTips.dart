@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flashcard_admin/Exam%20Tips/addTip.dart';
 import 'package:flashcard_admin/Exam%20Tips/deteleTip.dart';
 import 'package:flashcard_admin/Exam%20Tips/editExamTip.dart';
+import 'package:flashcard_admin/Exam%20Tips/publishTip.dart';
 import 'package:flashcard_admin/screens/tipsPage.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
@@ -58,7 +59,7 @@ class _ExamTipsState extends State<ExamTips> {
       decoration: GlobalWidget.backGround(),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: blueTextColor,
+          backgroundColor: buttonColor2,
           heroTag: 'newtip',
           onPressed: addTip,
           child: Center(
@@ -110,50 +111,118 @@ class _ExamTipsState extends State<ExamTips> {
                     itemBuilder: (context, index) {
                       return Slidable(
                         actionPane: SlidableDrawerActionPane(),
-                        secondaryActions: <Widget>[
-                          Container(
-                            height: 80,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10)),
-                              child: IconSlideAction(
-                                caption: 'Edit',
-                                color: Colors.black45,
-                                icon: Icons.edit,
-                                onTap: () {
-                                  editTip(
-                                      snapshot.data.docs[index].id,
-                                      index,
-                                      context,
-                                      convertStringFromDate(
-                                          snapshot.data.docs[index]['time']),
-                                      snapshot.data.docs[index]['tip'],
-                                      snapshot.data.docs[index]['remember']);
-                                },
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Container(
-                              height: 80,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                                child: IconSlideAction(
-                                  caption: 'Delete',
-                                  color: Colors.red,
-                                  icon: Icons.delete,
-                                  onTap: () {
-                                    deleteTip(snapshot.data.docs[index].id);
-                                  },
+                        secondaryActions: snapshot.data.docs[index]
+                                    ['published'] ==
+                                true
+                            ? <Widget>[
+                                Container(
+                                  height: 80,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10)),
+                                    child: IconSlideAction(
+                                      caption: 'Edit',
+                                      color: Colors.black45,
+                                      icon: Icons.edit,
+                                      onTap: () {
+                                        editTip(
+                                            snapshot.data.docs[index].id,
+                                            index,
+                                            context,
+                                            convertStringFromDate(snapshot
+                                                .data.docs[index]['time']),
+                                            snapshot.data.docs[index]['tip'],
+                                            snapshot.data.docs[index]
+                                                ['remember']);
+                                      },
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ],
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    height: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                      child: IconSlideAction(
+                                        caption: 'Delete',
+                                        color: Colors.red,
+                                        icon: Icons.delete,
+                                        onTap: () {
+                                          deleteTip(
+                                              snapshot.data.docs[index].id);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                            : <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10))),
+                                  height: 80,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10)),
+                                    child: IconSlideAction(
+                                      color: Colors.green,
+                                      caption: 'Publish',
+                                      icon: Icons.done,
+                                      onTap: () {
+                                        publishTip(
+                                            snapshot.data.docs[index].id);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 80,
+                                  child: IconSlideAction(
+                                    caption: 'Edit',
+                                    color: Colors.black45,
+                                    icon: Icons.edit,
+                                    onTap: () {
+                                      editTip(
+                                          snapshot.data.docs[index].id,
+                                          index,
+                                          context,
+                                          convertStringFromDate(snapshot
+                                              .data.docs[index]['time']),
+                                          snapshot.data.docs[index]['tip'],
+                                          snapshot.data.docs[index]
+                                              ['remember']);
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    height: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                      child: IconSlideAction(
+                                        caption: 'Delete',
+                                        color: Colors.red,
+                                        icon: Icons.delete,
+                                        onTap: () {
+                                          deleteTip(
+                                              snapshot.data.docs[index].id);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
@@ -164,6 +233,8 @@ class _ExamTipsState extends State<ExamTips> {
                                   builder: (context) => TipsPage(
                                     allTips: snapshot.data.docs,
                                     myIndex: index,
+                                    appBarIndex:
+                                        snapshot.data.docs.length - index,
                                   ),
                                 ),
                               );
@@ -174,7 +245,11 @@ class _ExamTipsState extends State<ExamTips> {
                                 height: 80,
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                  color: buttonColor2,
+                                  color: snapshot.data.docs[index]
+                                              ['published'] ==
+                                          true
+                                      ? buttonColor2
+                                      : buttonColor1,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Row(
@@ -196,7 +271,8 @@ class _ExamTipsState extends State<ExamTips> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Tip # ${index + 1}',
+                                            // 'Tip # ${index + 1}',
+                                            'Tip # ${snapshot.data.docs.length - index}',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16),
@@ -205,12 +281,6 @@ class _ExamTipsState extends State<ExamTips> {
                                           Text(
                                             snapshot.data.docs[index]['time']
                                                     .toDate()
-                                                    .year
-                                                    .toString() +
-                                                '-' +
-                                                snapshot
-                                                    .data.docs[index]['time']
-                                                    .toDate()
                                                     .month
                                                     .toString() +
                                                 '-' +
@@ -218,14 +288,25 @@ class _ExamTipsState extends State<ExamTips> {
                                                     .data.docs[index]['time']
                                                     .toDate()
                                                     .day
+                                                    .toString() +
+                                                '-' +
+                                                snapshot
+                                                    .data.docs[index]['time']
+                                                    .toDate()
+                                                    .year
                                                     .toString(),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w300,
                                                 fontSize: 13),
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ),
+                                    SizedBox(width: 15),
+                                    snapshot.data.docs[index]['published'] ==
+                                            true
+                                        ? Container()
+                                        : Text('(Not Published)'),
                                     Expanded(
                                       child: Align(
                                         alignment: Alignment.centerRight,
@@ -276,6 +357,15 @@ class _ExamTipsState extends State<ExamTips> {
         context: context,
         barrierDismissible: false,
         child: DeleteTip(
+          docId: docId,
+        ));
+  }
+
+  publishTip(String docId) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        child: PublishTip(
           docId: docId,
         ));
   }

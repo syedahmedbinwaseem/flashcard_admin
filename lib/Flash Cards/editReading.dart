@@ -105,13 +105,14 @@ class _EditReadingState extends State<EditReading> {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                  Navigator.pop(context);
                                   await FirebaseFirestore.instance
                                       .collection('level1')
                                       .doc(widget.sessionId)
                                       .collection('readings')
                                       .doc(widget.readId)
                                       .update({'title': textController.text});
+                                  Navigator.pop(context);
+
                                   setState(() {
                                     isLoading = false;
                                   });

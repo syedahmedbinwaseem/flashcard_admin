@@ -63,13 +63,14 @@ class _DeleteReadingState extends State<DeleteReading> {
                             setState(() {
                               isLoading = true;
                             });
-                            Navigator.pop(context);
                             await FirebaseFirestore.instance
                                 .collection('level1')
                                 .doc(widget.sessionId)
                                 .collection('readings')
                                 .doc(widget.readId)
                                 .delete();
+                            Navigator.pop(context);
+
                             setState(() {
                               isLoading = false;
                             });

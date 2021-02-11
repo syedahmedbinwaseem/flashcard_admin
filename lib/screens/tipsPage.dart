@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 class TipsPage extends StatefulWidget {
   List<DocumentSnapshot> allTips;
   int myIndex;
+  int appBarIndex;
 
-  TipsPage({this.allTips, this.myIndex});
+  TipsPage({this.allTips, this.myIndex, this.appBarIndex});
   @override
   _TipsPageState createState() => _TipsPageState();
 }
@@ -37,6 +38,7 @@ class _TipsPageState extends State<TipsPage> {
                     onPressed: () {
                       setState(() {
                         widget.myIndex++;
+                        widget.appBarIndex--;
                       });
                     },
                   ),
@@ -62,7 +64,7 @@ class _TipsPageState extends State<TipsPage> {
           ),
           centerTitle: true,
           title: Text(
-            'Tip # ${widget.myIndex + 1}',
+            'Tip # ${widget.appBarIndex}',
             style: TextStyle(color: Colors.black),
           ),
           backgroundColor: Colors.white,
@@ -134,6 +136,7 @@ class _TipsPageState extends State<TipsPage> {
                           onPressed: () {
                             setState(() {
                               widget.myIndex--;
+                              widget.appBarIndex++;
                             });
                           },
                         ),

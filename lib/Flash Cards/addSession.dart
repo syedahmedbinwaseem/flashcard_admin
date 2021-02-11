@@ -15,10 +15,20 @@ class AddSessionState extends State<AddSession>
   final sessionName = TextEditingController();
   GlobalKey<FormState> fKey = GlobalKey<FormState>();
   bool isLoading;
+  int totalSessions;
+
+  void getTotalSessions() async {
+    QuerySnapshot snap =
+        await FirebaseFirestore.instance.collection('level1').get();
+    setState(() {
+      totalSessions = snap.docs.length;
+    });
+  }
 
   @override
   void initState() {
     isLoading = false;
+    getTotalSessions();
     super.initState();
   }
 
@@ -111,7 +121,8 @@ class AddSessionState extends State<AddSession>
                                           await doc.set({
                                             'created_at': Timestamp.now(),
                                             'id': doc.id,
-                                            'title': sessionName.text
+                                            'title': sessionName.text,
+                                            'index': totalSessions + 1
                                           });
                                         } catch (e) {
                                           Fluttertoast.showToast(

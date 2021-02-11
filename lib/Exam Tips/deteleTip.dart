@@ -72,8 +72,6 @@ class _DeleteTipState extends State<DeleteTip> {
                         FlatButton(
                           minWidth: 30,
                           onPressed: () async {
-                            Navigator.pop(context);
-
                             setState(() {
                               isLoading = true;
                             });
@@ -81,6 +79,7 @@ class _DeleteTipState extends State<DeleteTip> {
                                 .collection('examtips')
                                 .doc(widget.docId)
                                 .delete();
+                            Navigator.pop(context);
 
                             setState(() {
                               isLoading = false;

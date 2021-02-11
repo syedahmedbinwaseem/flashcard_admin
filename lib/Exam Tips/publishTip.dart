@@ -1,19 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flashcard_admin/NotificationManager/pushNotificationManager.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
+import 'package:flashcard_admin/utils/toast_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-// ignore: must_be_immutable
-class DeleteQuiz extends StatefulWidget {
+class PublishTip extends StatefulWidget {
   String docId;
 
-  DeleteQuiz({this.docId});
+  PublishTip({this.docId});
   @override
-  _DeleteQuizState createState() => _DeleteQuizState();
+  _PublishTipState createState() => _PublishTipState();
 }
 
-class _DeleteQuizState extends State<DeleteQuiz> {
+class _PublishTipState extends State<PublishTip> {
   bool isLoading = false;
+  FToast fToast;
+
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -32,12 +43,12 @@ class _DeleteQuizState extends State<DeleteQuiz> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Warning',
-                    style: TextStyle(color: Colors.red, fontSize: 20),
+                    'Publish',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Are you sure you want to delete?',
+                    'Are you sure you want to publish the tip?',
                     style: TextStyle(color: Colors.black, fontSize: 15),
                   ),
                   SizedBox(height: 10),
@@ -65,10 +76,26 @@ class _DeleteQuizState extends State<DeleteQuiz> {
                               setState(() {
                                 isLoading = true;
                               });
+
                               await FirebaseFirestore.instance
-                                  .collection('quizzes')
+                                  .collection('examtips')
                                   .doc(widget.docId)
-                                  .delete();
+                                  .update({'published': true});
+
+                              NotificationManager notificationManager =
+                                  new NotificationManager();
+                              notificationManager.sendAndRetrieveMessage(
+                                  '',
+                                  "Tip of Day!",
+                                  "CFA Nodal Trainer added new tip of day for you.");
+
+                              fToast.showToast(
+                                child: ToastWidget.toast(
+                                    'Published successfully',
+                                    Icon(Icons.done, size: 20)),
+                                toastDuration: Duration(seconds: 3),
+                                gravity: ToastGravity.BOTTOM,
+                              );
                               Navigator.pop(context);
 
                               setState(() {
@@ -80,7 +107,7 @@ class _DeleteQuizState extends State<DeleteQuiz> {
                               style: TextStyle(
                                   fontFamily: 'Segoe',
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.red),
+                                  color: Colors.green),
                             ),
                           )
                         ],

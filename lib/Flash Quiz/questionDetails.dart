@@ -33,6 +33,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
   String dropdownValue;
   bool edit = false;
   FToast fToast;
+  bool saved = false;
 
   @override
   void initState() {
@@ -127,6 +128,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                           setState(() {
                                             snap = snapshot.data;
                                           });
+
                                           addAnswerOption();
                                         },
                                       ),
@@ -276,7 +278,11 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                                     size: 18,
                                                   ),
                                                 )
-                                              : edit == true
+                                              : edit == true ||
+                                                      snapshot.data["answer_options"]
+                                                                  .length >
+                                                              1 &&
+                                                          saved == true
                                                   ? IconButton(
                                                       onPressed: () {
                                                         setState(() {
@@ -616,6 +622,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
 
                                     setState(() {
                                       isLoading = false;
+                                      edit = true;
                                     });
                                   }
                                 },
@@ -945,6 +952,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                     Navigator.pop(context);
                                     setState(() {
                                       isLoading = true;
+                                      saved = true;
                                     });
                                     await FirebaseFirestore.instance
                                         .collection('quizzes')
@@ -956,6 +964,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                     setState(() {
                                       isLoading = false;
                                       edit = false;
+                                      saved = false;
                                     });
                                   }
                                 },
