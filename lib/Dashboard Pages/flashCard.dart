@@ -12,11 +12,11 @@ import 'package:flashcard_admin/Flash%20Cards/deleteSession.dart';
 import 'package:flashcard_admin/Flash%20Cards/editFC.dart';
 import 'package:flashcard_admin/Flash%20Cards/editReading.dart';
 import 'package:flashcard_admin/Flash%20Cards/editSession.dart';
+import 'package:flashcard_admin/Flash%20Cards/publishFC.dart';
 import 'package:flashcard_admin/screens/ImageView.dart';
 import 'package:flashcard_admin/screens/dashboard.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
-import 'package:flashcard_admin/utils/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -853,94 +853,220 @@ class _FlashCardState extends State<FlashCard>
                                                               .id;
                                                         });
                                                       },
-                                                      child: Align(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        child: Text(
-                                                          formatter.format(
-                                                                  index + 1) +
-                                                              '\t\t\t\t' +
-                                                              snapshot.data
-                                                                          .docs[
-                                                                      index]
-                                                                  ['title'],
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
+                                                      child: Column(
+                                                        children: [
+                                                          Align(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            child: Text(
+                                                              formatter.format(
+                                                                      index +
+                                                                          1) +
+                                                                  '\t\t\t\t' +
+                                                                  snapshot.data
+                                                                              .docs[
+                                                                          index]
+                                                                      ['title'],
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ),
+                                                          snapshot.data.docs[
+                                                                          index]
+                                                                      [
+                                                                      'published'] ==
+                                                                  true
+                                                              ? Container()
+                                                              : Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child: Text(
+                                                                      '(Not Published)'),
+                                                                ),
+                                                        ],
                                                       ),
                                                     ),
-                                                    secondaryActions: <Widget>[
-                                                      ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                        child: IconSlideAction(
-                                                          caption: 'Edit',
-                                                          color: Colors.black45,
-                                                          icon: Icons.edit,
-                                                          onTap: () {
-                                                            setState(() {
-                                                              added = false;
-                                                            });
-                                                            _editFC(
-                                                                docId,
-                                                                readId,
-                                                                snapshot
+                                                    secondaryActions: snapshot
                                                                     .data
                                                                     .docs[index]
-                                                                    .id,
-                                                                snapshot.data
-                                                                            .docs[
-                                                                        index]
-                                                                    ['title'],
-                                                                snapshot.data
-                                                                            .docs[
-                                                                        index]
-                                                                    ['body'],
-                                                                snapshot.data
-                                                                            .docs[
-                                                                        index][
-                                                                    'img_link']);
-                                                          },
-                                                        ),
-                                                      ),
-                                                      ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                        child: IconSlideAction(
-                                                          caption: 'Delete',
-                                                          color: Colors.red,
-                                                          icon: Icons.delete,
-                                                          onTap: () {
-                                                            _deleteFC(
-                                                                docId,
-                                                                readId,
-                                                                snapshot
-                                                                    .data
-                                                                    .docs[index]
-                                                                    .id,
-                                                                snapshot.data
-                                                                            .docs[
-                                                                        index]
-                                                                    ['title']);
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ],
+                                                                ['published'] ==
+                                                            true
+                                                        ? <Widget>[
+                                                            ClipRRect(
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              child:
+                                                                  IconSlideAction(
+                                                                caption: 'Edit',
+                                                                color: Colors
+                                                                    .black45,
+                                                                icon:
+                                                                    Icons.edit,
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    added =
+                                                                        false;
+                                                                  });
+                                                                  _editFC(
+                                                                      docId,
+                                                                      readId,
+                                                                      snapshot
+                                                                          .data
+                                                                          .docs[
+                                                                              index]
+                                                                          .id,
+                                                                      snapshot.data
+                                                                              .docs[index]
+                                                                          [
+                                                                          'title'],
+                                                                      snapshot.data
+                                                                              .docs[index]
+                                                                          [
+                                                                          'body'],
+                                                                      snapshot
+                                                                          .data
+                                                                          .docs[index]['img_link']);
+                                                                },
+                                                              ),
+                                                            ),
+                                                            ClipRRect(
+                                                              borderRadius: BorderRadius.only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              child:
+                                                                  IconSlideAction(
+                                                                caption:
+                                                                    'Delete',
+                                                                color:
+                                                                    Colors.red,
+                                                                icon: Icons
+                                                                    .delete,
+                                                                onTap: () {
+                                                                  _deleteFC(
+                                                                      docId,
+                                                                      readId,
+                                                                      snapshot
+                                                                          .data
+                                                                          .docs[
+                                                                              index]
+                                                                          .id,
+                                                                      snapshot
+                                                                          .data
+                                                                          .docs[index]['title']);
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ]
+                                                        : <Widget>[
+                                                            ClipRRect(
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              child:
+                                                                  IconSlideAction(
+                                                                color: Colors
+                                                                    .green,
+                                                                caption:
+                                                                    'Publish',
+                                                                icon:
+                                                                    Icons.done,
+                                                                onTap: () {
+                                                                  _publishFC(
+                                                                    docId,
+                                                                    readId,
+                                                                    snapshot
+                                                                        .data
+                                                                        .docs[
+                                                                            index]
+                                                                        .id,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ),
+                                                            ClipRRect(
+                                                              child:
+                                                                  IconSlideAction(
+                                                                caption: 'Edit',
+                                                                color: Colors
+                                                                    .black45,
+                                                                icon:
+                                                                    Icons.edit,
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    added =
+                                                                        false;
+                                                                  });
+                                                                  _editFC(
+                                                                      docId,
+                                                                      readId,
+                                                                      snapshot
+                                                                          .data
+                                                                          .docs[
+                                                                              index]
+                                                                          .id,
+                                                                      snapshot.data
+                                                                              .docs[index]
+                                                                          [
+                                                                          'title'],
+                                                                      snapshot.data
+                                                                              .docs[index]
+                                                                          [
+                                                                          'body'],
+                                                                      snapshot
+                                                                          .data
+                                                                          .docs[index]['img_link']);
+                                                                },
+                                                              ),
+                                                            ),
+                                                            ClipRRect(
+                                                              borderRadius: BorderRadius.only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              child:
+                                                                  IconSlideAction(
+                                                                caption:
+                                                                    'Delete',
+                                                                color:
+                                                                    Colors.red,
+                                                                icon: Icons
+                                                                    .delete,
+                                                                onTap: () {
+                                                                  _deleteFC(
+                                                                      docId,
+                                                                      readId,
+                                                                      snapshot
+                                                                          .data
+                                                                          .docs[
+                                                                              index]
+                                                                          .id,
+                                                                      snapshot
+                                                                          .data
+                                                                          .docs[index]['title']);
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ],
                                                   ),
                                                   Divider(height: 0)
                                                 ],
@@ -1239,15 +1365,22 @@ class _FlashCardState extends State<FlashCard>
                                                             child: Column(
                                                               children: [
                                                                 expand
-                                                                    ? Text(
-                                                                        flashList[myIndex]
-                                                                            [
-                                                                            'body'],
-                                                                        style: TextStyle(
+                                                                    ? Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(8),
+                                                                        decoration: BoxDecoration(
                                                                             color:
-                                                                                textColor,
-                                                                            fontSize:
-                                                                                15),
+                                                                                Colors.white,
+                                                                            borderRadius: BorderRadius.circular(10)),
+                                                                        child:
+                                                                            Text(
+                                                                          flashList[myIndex]
+                                                                              [
+                                                                              'body'],
+                                                                          style: TextStyle(
+                                                                              color: textColor,
+                                                                              fontSize: 15),
+                                                                        ),
                                                                       )
                                                                     : Container(),
                                                                 SizedBox(
@@ -1672,6 +1805,17 @@ class _FlashCardState extends State<FlashCard>
           title: title,
           body: body,
           imgUrl: imgUrl,
+        ));
+  }
+
+  _publishFC(String sessionId, String readId, String fcId) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        child: PublishFC(
+          docId: sessionId,
+          readId: readId,
+          fcId: fcId,
         ));
   }
 

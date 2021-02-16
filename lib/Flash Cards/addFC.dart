@@ -280,6 +280,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                               'created_at': Timestamp.now(),
                                               'id': doc.id,
                                               'index': totalFC + 1,
+                                              'published': false,
                                               'title': fcName.text,
                                               'body': fcBody.text,
                                               'img_link': imagePath == null ||
@@ -299,14 +300,6 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                             );
                                           }
                                         });
-
-                                        NotificationManager
-                                            notificationManager =
-                                            new NotificationManager();
-                                        notificationManager.sendAndRetrieveMessage(
-                                            '',
-                                            "New Flashcard added",
-                                            "CFA Nodal Trainer added new Flashcard in Session \'$sessionName\' under Reading \'$readingName\'.");
 
                                         Fluttertoast.showToast(
                                           msg:
