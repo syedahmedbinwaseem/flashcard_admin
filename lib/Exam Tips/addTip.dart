@@ -162,7 +162,7 @@ class _AddTipState extends State<AddTip> {
                                 child: ToastWidget.toast('Tip cannot be empty',
                                     Icon(Icons.error, size: 20)),
                                 toastDuration: Duration(seconds: 2),
-                                gravity: ToastGravity.BOTTOM,
+                                gravity: ToastGravity.CENTER,
                               );
                               setState(() {
                                 isLoading = false;
@@ -173,7 +173,7 @@ class _AddTipState extends State<AddTip> {
                                     'Remember cannot be empty',
                                     Icon(Icons.error, size: 20)),
                                 toastDuration: Duration(seconds: 2),
-                                gravity: ToastGravity.BOTTOM,
+                                gravity: ToastGravity.CENTER,
                               );
                               setState(() {
                                 isLoading = false;
@@ -183,7 +183,7 @@ class _AddTipState extends State<AddTip> {
                                 child: ToastWidget.toast('Date cannot be empty',
                                     Icon(Icons.error, size: 20)),
                                 toastDuration: Duration(seconds: 2),
-                                gravity: ToastGravity.BOTTOM,
+                                gravity: ToastGravity.CENTER,
                               );
                               setState(() {
                                 isLoading = false;

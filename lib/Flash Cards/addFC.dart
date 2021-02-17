@@ -78,7 +78,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
         Fluttertoast.showToast(
           msg: 'not',
           toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
+          gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
           backgroundColor: Colors.red[400],
           textColor: Colors.white,
@@ -102,7 +102,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
           child: ToastWidget.toast(
               'Cannot add image', Icon(Icons.error, size: 20)),
           toastDuration: Duration(seconds: 2),
-          gravity: ToastGravity.BOTTOM,
+          gravity: ToastGravity.CENTER,
         );
       }
     });
@@ -292,7 +292,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                             Fluttertoast.showToast(
                                               msg: "Something went wrong!",
                                               toastLength: Toast.LENGTH_LONG,
-                                              gravity: ToastGravity.BOTTOM,
+                                              gravity: ToastGravity.CENTER,
                                               timeInSecForIosWeb: 3,
                                               backgroundColor: buttonColor1,
                                               textColor: Colors.white,
@@ -305,7 +305,7 @@ class AddFCState extends State<AddFC> with SingleTickerProviderStateMixin {
                                           msg:
                                               "Successfully Added new FlashCard!",
                                           toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
+                                          gravity: ToastGravity.CENTER,
                                           timeInSecForIosWeb: 3,
                                           backgroundColor: buttonColor1,
                                           textColor: Colors.white,

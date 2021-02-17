@@ -61,7 +61,7 @@ class _EditFCState extends State<EditFC> {
           child: ToastWidget.toast(
               'Cannot add image', Icon(Icons.error, size: 20)),
           toastDuration: Duration(seconds: 2),
-          gravity: ToastGravity.BOTTOM,
+          gravity: ToastGravity.CENTER,
         );
       }
     }
@@ -81,7 +81,7 @@ class _EditFCState extends State<EditFC> {
           child: ToastWidget.toast(
               'Cannot add image', Icon(Icons.error, size: 20)),
           toastDuration: Duration(seconds: 2),
-          gravity: ToastGravity.BOTTOM,
+          gravity: ToastGravity.CENTER,
         );
       }
     });

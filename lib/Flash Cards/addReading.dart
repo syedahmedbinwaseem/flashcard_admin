@@ -138,7 +138,7 @@ class AddReadingState extends State<AddReading>
                                           Fluttertoast.showToast(
                                             msg: "Something went wrong!",
                                             toastLength: Toast.LENGTH_LONG,
-                                            gravity: ToastGravity.BOTTOM,
+                                            gravity: ToastGravity.CENTER,
                                             timeInSecForIosWeb: 3,
                                             backgroundColor: buttonColor1,
                                             textColor: Colors.white,
