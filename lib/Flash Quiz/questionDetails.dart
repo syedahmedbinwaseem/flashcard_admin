@@ -236,41 +236,45 @@ class _QuestionDetailState extends State<QuestionDetail> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Container(
-                            padding: EdgeInsets.only(left: 8, right: 8),
-                            width: MediaQuery.of(context).size.width,
-                            child: DropdownButtonHideUnderline(
-                              child: new DropdownButton<String>(
-                                isExpanded: true,
-                                hint: Text(
-                                  'Select an option',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                                value:
-                                    List.from(snapshot.data['answer_options'])
-                                            .contains(dropdownValue)
-                                        ? dropdownValue
-                                        : null,
-                                icon: Icon(Icons.arrow_downward),
-                                iconSize: 24,
-                                elevation: 16,
-                                style: TextStyle(color: Colors.black),
-                                onChanged: (String value) {
-                                  print(value);
-                                  setState(() {
-                                    snap = snapshot.data;
-                                  });
-                                  addCorrectAnswer(value);
-                                },
-                                items:
-                                    List.from(snapshot.data['answer_options'])
-                                        .map<DropdownMenuItem<String>>((e) =>
-                                            DropdownMenuItem<String>(
-                                                value: e, child: Text(e)))
-                                        .toList(),
-                              ),
-                            ),
-                          ),
+                          snapshot.data.data().containsKey('answer_options')
+                              ? Container(
+                                  padding: EdgeInsets.only(left: 8, right: 8),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: DropdownButtonHideUnderline(
+                                    child: new DropdownButton<String>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select an option',
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                      value: List.from(snapshot
+                                                  .data['answer_options'])
+                                              .contains(dropdownValue)
+                                          ? dropdownValue
+                                          : null,
+                                      icon: Icon(Icons.arrow_downward),
+                                      iconSize: 24,
+                                      elevation: 16,
+                                      style: TextStyle(color: Colors.black),
+                                      onChanged: (String value) {
+                                        print(value);
+                                        setState(() {
+                                          snap = snapshot.data;
+                                          dropdownValue = value;
+                                        });
+                                        addCorrectAnswer(value);
+                                      },
+                                      items: List.from(
+                                              snapshot.data['answer_options'])
+                                          .map<DropdownMenuItem<String>>((e) =>
+                                              DropdownMenuItem<String>(
+                                                  value: e, child: Text(e)))
+                                          .toList(),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                           Divider(height: 5),
                           SizedBox(height: 15),
                           Container(
