@@ -122,7 +122,8 @@ class AddSessionState extends State<AddSession>
                                             'created_at': Timestamp.now(),
                                             'id': doc.id,
                                             'title': sessionName.text,
-                                            'index': totalSessions + 1
+                                            'index': totalSessions + 1,
+                                            'published': false
                                           });
                                         } catch (e) {
                                           Fluttertoast.showToast(

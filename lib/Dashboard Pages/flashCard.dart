@@ -15,6 +15,7 @@ import 'package:flashcard_admin/Flash%20Cards/editSession.dart';
 import 'package:flashcard_admin/Flash%20Cards/publishFC.dart';
 import 'package:flashcard_admin/screens/ImageView.dart';
 import 'package:flashcard_admin/screens/dashboard.dart';
+import 'package:flashcard_admin/Flash Cards/publishSession.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flutter/material.dart';
@@ -1675,69 +1676,172 @@ class _FlashCardState extends State<FlashCard>
                                                                     ),
                                                                   ),
                                                                 ),
+                                                                snapshot.data.docs[index]
+                                                                            [
+                                                                            'published'] ==
+                                                                        true
+                                                                    ? Container()
+                                                                    : Align(
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets.only(
+                                                                              top: 5,
+                                                                              bottom: 5),
+                                                                          child:
+                                                                              Text('(Not Published)'),
+                                                                        ),
+                                                                      ),
                                                               ],
                                                             ),
                                                           ),
                                                         ),
-                                                        secondaryActions: <
-                                                            Widget>[
-                                                          ClipRRect(
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            child:
-                                                                IconSlideAction(
-                                                              caption: 'Edit',
-                                                              color: Colors
-                                                                  .black45,
-                                                              icon: Icons.edit,
-                                                              onTap: () {
-                                                                _editSession(
-                                                                    snapshot
-                                                                        .data
-                                                                        .docs[
-                                                                            index]
-                                                                        .id,
-                                                                    snapshot.data
+                                                        secondaryActions: snapshot
+                                                                            .data
+                                                                            .docs[
+                                                                        index][
+                                                                    'published'] ==
+                                                                true
+                                                            ? <Widget>[
+                                                                ClipRRect(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                  child:
+                                                                      IconSlideAction(
+                                                                    caption:
+                                                                        'Edit',
+                                                                    color: Colors
+                                                                        .black45,
+                                                                    icon: Icons
+                                                                        .edit,
+                                                                    onTap: () {
+                                                                      _editSession(
+                                                                          snapshot
+                                                                              .data
+                                                                              .docs[
+                                                                                  index]
+                                                                              .id,
+                                                                          snapshot
+                                                                              .data
+                                                                              .docs[index]['title']);
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                ClipRRect(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                  child:
+                                                                      IconSlideAction(
+                                                                    caption:
+                                                                        'Delete',
+                                                                    color: Colors
+                                                                        .red,
+                                                                    icon: Icons
+                                                                        .delete,
+                                                                    onTap: () {
+                                                                      _deleteSession(
+                                                                          snapshot
+                                                                              .data
+                                                                              .docs[
+                                                                                  index]
+                                                                              .id,
+                                                                          snapshot
+                                                                              .data
+                                                                              .docs[index]['title']);
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ]
+                                                            : <Widget>[
+                                                                ClipRRect(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                  child:
+                                                                      IconSlideAction(
+                                                                    caption:
+                                                                        'Publish',
+                                                                    color: Colors
+                                                                        .green,
+                                                                    icon: Icons
+                                                                        .done,
+                                                                    onTap: () {
+                                                                      _publishSession(
+                                                                        snapshot
+                                                                            .data
                                                                             .docs[index]
-                                                                        [
-                                                                        'title']);
-                                                              },
-                                                            ),
-                                                          ),
-                                                          ClipRRect(
-                                                            borderRadius: BorderRadius.only(
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            child:
-                                                                IconSlideAction(
-                                                              caption: 'Delete',
-                                                              color: Colors.red,
-                                                              icon:
-                                                                  Icons.delete,
-                                                              onTap: () {
-                                                                _deleteSession(
-                                                                    snapshot
-                                                                        .data
-                                                                        .docs[
-                                                                            index]
-                                                                        .id,
-                                                                    snapshot.data
-                                                                            .docs[index]
-                                                                        [
-                                                                        'title']);
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ],
+                                                                            .id,
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                ClipRRect(
+                                                                  child:
+                                                                      IconSlideAction(
+                                                                    caption:
+                                                                        'Edit',
+                                                                    color: Colors
+                                                                        .black45,
+                                                                    icon: Icons
+                                                                        .edit,
+                                                                    onTap: () {
+                                                                      _editSession(
+                                                                          snapshot
+                                                                              .data
+                                                                              .docs[
+                                                                                  index]
+                                                                              .id,
+                                                                          snapshot
+                                                                              .data
+                                                                              .docs[index]['title']);
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                ClipRRect(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                  child:
+                                                                      IconSlideAction(
+                                                                    caption:
+                                                                        'Delete',
+                                                                    color: Colors
+                                                                        .red,
+                                                                    icon: Icons
+                                                                        .delete,
+                                                                    onTap: () {
+                                                                      _deleteSession(
+                                                                          snapshot
+                                                                              .data
+                                                                              .docs[
+                                                                                  index]
+                                                                              .id,
+                                                                          snapshot
+                                                                              .data
+                                                                              .docs[index]['title']);
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ],
                                                       ),
                                                       Divider(height: 0)
                                                     ],
@@ -1805,6 +1909,17 @@ class _FlashCardState extends State<FlashCard>
           title: title,
           body: body,
           imgUrl: imgUrl,
+        ));
+  }
+
+  _publishSession(
+    String docId,
+  ) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        child: PublishSession(
+          docId: docId,
         ));
   }
 

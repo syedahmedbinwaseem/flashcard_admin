@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flashcard_admin/NotificationManager/pushNotificationManager.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flashcard_admin/utils/toast_widget.dart';
 import 'package:flutter/material.dart';

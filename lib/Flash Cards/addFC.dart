@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flashcard_admin/NotificationManager/pushNotificationManager.dart';
 import 'package:flashcard_admin/utils/colors.dart';
 import 'package:flashcard_admin/utils/global_widgets.dart';
 import 'package:flashcard_admin/utils/toast_widget.dart';
