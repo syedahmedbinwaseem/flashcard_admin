@@ -132,7 +132,8 @@ class AddReadingState extends State<AddReading>
                                             'created_at': Timestamp.now(),
                                             'id': doc.id,
                                             'title': readingName.text,
-                                            'index': totalReadings + 1
+                                            'index': totalReadings + 1,
+                                            'published': false
                                           });
                                         } catch (e) {
                                           Fluttertoast.showToast(
