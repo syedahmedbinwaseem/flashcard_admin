@@ -200,7 +200,8 @@ class _AddTipState extends State<AddTip> {
                                     'tip': tipCon.text,
                                     'remember': remCon.text,
                                     'time': Timestamp.fromDate(
-                                        convertDateFromString(date))
+                                        convertDateFromString(date)),
+                                    'seen': []
                                   });
                                   Navigator.pop(context);
 
