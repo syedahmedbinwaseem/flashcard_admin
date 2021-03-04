@@ -88,6 +88,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
                   .doc(widget.qId)
                   .snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                print("Here we got ::: Snap Id :  and ${snapshot.data.id}");
                 return snapshot.data == null
                     ? CircularProgressIndicator()
                     : Column(
@@ -302,7 +303,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                               .containsKey('explanation')
                                           ? IconButton(
                                               onPressed: () {
-                                                addExplanation();
+                                                addExplanation(snapshot.data);
                                               },
                                               icon: Icon(
                                                 Icons.add,
@@ -312,7 +313,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                           : IconButton(
                                               onPressed: () {
                                                 editExplanation(snapshot
-                                                    .data['explanation']);
+                                                    .data['explanation'], snapshot.data);
                                               },
                                               icon: Icon(
                                                 Icons.edit,
@@ -362,6 +363,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
     GlobalKey<FormState> fKey = GlobalKey<FormState>();
     List previousValues = [];
     showDialog(
+      barrierDismissible: false,
         context: context,
         builder: (context) {
           return Dialog(
@@ -499,6 +501,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
     List previousValues = [];
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return Dialog(
             insetPadding: EdgeInsets.all(0),
@@ -625,6 +628,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
   deleteAnswerOption(int index) {
     List previousValues = [];
     showDialog(
+      barrierDismissible: false,
         context: context,
         builder: (context) {
           return Dialog(
@@ -932,9 +936,10 @@ class _QuestionDetailState extends State<QuestionDetail> {
         });
   }
 
-  addExplanation() {
+  addExplanation(DocumentSnapshot quizSnap) {
     TextEditingController textController = new TextEditingController();
     GlobalKey<FormState> fKey = GlobalKey<FormState>();
+    // print("here we got ::: $snap ::: ++++");
     showDialog(
         context: context,
         builder: (context) {
@@ -976,6 +981,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
                             },
                             textInputAction: TextInputAction.done,
                             cursorColor: Colors.grey[700],
+                            maxLines: 3,
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
                                     borderSide:
@@ -1014,15 +1020,21 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                     setState(() {
                                       isLoading = true;
                                     });
+                                    try{
                                     await FirebaseFirestore.instance
                                         .collection('quizzes')
                                         .doc(widget.docId)
                                         .collection('questions')
-                                        .doc(snap.id)
+                                        .doc(quizSnap.id)
                                         .update({
                                       'explanation': textController.text
                                     });
-
+                                    }catch(e){
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      Fluttertoast.showToast(msg: "Exception $e");
+                                    }
                                     setState(() {
                                       isLoading = false;
                                     });
@@ -1049,7 +1061,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
         });
   }
 
-  editExplanation(String explanation) {
+  editExplanation(String explanation, DocumentSnapshot quizSnap) {
     TextEditingController textController =
         new TextEditingController(text: explanation);
     GlobalKey<FormState> fKey = GlobalKey<FormState>();
@@ -1136,7 +1148,7 @@ class _QuestionDetailState extends State<QuestionDetail> {
                                         .collection('quizzes')
                                         .doc(widget.docId)
                                         .collection('questions')
-                                        .doc(snap.id)
+                                        .doc(quizSnap.id)
                                         .update({
                                       'explanation': textController.text
                                     });
