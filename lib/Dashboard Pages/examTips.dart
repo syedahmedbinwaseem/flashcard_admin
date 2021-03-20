@@ -354,11 +354,14 @@ class _ExamTipsState extends State<ExamTips> {
 
   deleteTip(String docId) {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        child: DeleteTip(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return DeleteTip(
           docId: docId,
-        ));
+        );
+      },
+    );
   }
 
   publishTip(String docId) {
